@@ -1,0 +1,108 @@
+
+
+参考这篇文档：
+- http://doc.norang.ca/org-mode.html
+- http://orgmode.org/guide/Agenda-commands.html
+- http://orgmode.org/manual/Agenda-commands.html
+
+* My day goes generally like this:
+
+- Punch in with =F9-I= (this starts the clock on the default task)
+- Look at the agenda and make a mental note of anything important to deal with today
+- Read email and news
+  - create notes, and tasks for things that need responses with org-capture with =C-c c=
+- Check refile tasks and respond to emails with =C-c C-w=
+- Look at my agenda and work on important tasks for today
+  - Clock it in with =I=
+  - Work on it until it is =DONE= or it gets interrupted
+- Work on tasks
+- Make journal entries (=C-c c j=) for interruptions
+- Punch out for lunch and punch back in after lunch with =F9-O=
+- work on more tasks
+- Refile tasks to empty the list with =C-c C-w= 
+  - Tag tasks to be refiled with =m= collecting all tasks for the same target
+  - Bulk refile the tasks to the target location with =B r=
+  - Repeat (or refile individually with =C-c C-w=) until all refile tasks are gone
+- Mark habits done today as DONE
+- Punch out at the end of the work day
+ 
+
+I'll work on this file in the following sequence:
+
+1. I punch in with =F9-I= at the start of my day
+
+   That clocks in the =Organization= task by id in my =todo.org= file.
+
+2. =F12-SPC= to review my block agenda
+
+   Pick 'TODO Some miscellaneous task' to work on next and clock that in with =I=
+   The clock is now on 'TODO Some miscellaneous task'
+
+3. I complete that task and mark it done with =C-c C-t d=
+
+   This stops the clock and moves it back to the =Organization= task.
+
+4. Now I want to work on =Project A= so I clock in =Task 1=
+
+   I work on Task 1 and mark it =DONE=.  This clocks out =Task 1= and moves
+   the clock to =Project A=.  Now I work on =Task 2= and clock that in.
+
+
+- Use the clock history C-u C-c C-x C-i
+  Go back to something I was clocking that is not finished
+- Pick something off today's block agenda
+  =SCHEDULED= or =DEADLINE= items that need to be done soon
+- Pick something off the =NEXT= tasks agenda view
+  Work on some unfinished task to move to completion
+- Pick something off the other task list 
+- Use an agenda view with filtering to pick something to work on
+
+
+* Reports
+
+To get a report of time spent on tasks for =XYZ.org= you simply visit
+the =XYZ.org= file and run an agenda clock report for the last month
+with =F12 < a v m b R=.  This limits the agenda to this one file,
+shows the agenda for a full month, moves to last month, and generates
+a clock report.
+
+
+* Key bindings
+:LOGBOOK:  
+CLOCK: [2015-08-20 四 09:37]--[2015-08-20 四 09:40] =>  0:03
+:END:      
+| Key     | For                                             | Used       |
+|---------+-------------------------------------------------+------------|
+| F12     | Agenda (1 key less than C-c a)                  | Very Often |
+| C-c b   | Switch to org file                              | Very Often |
+| F11     | Goto currently clocked item                     | Very Often |
+| C-c c   | Capture a task                                  | Very Often |
+| C-F11   | Clock in a task (show menu with prefix)         | Often      |
+| f9 g    | Gnus - I check mail regularly                   | Often      |
+| f5      | Show todo items for this subtree                | Often      |
+| S-f5    | Widen                                           | Often      |
+| f9 b    | Quick access to bbdb data                       | Often      |
+| f9 c    | Calendar access                                 | Often      |
+| C-S-f12 | Save buffers and publish current project        | Often      |
+| C-c l   | Store a link for retrieval with C-c C-l         | Often      |
+| f8      | Go to next org file in org-agenda-files         | Sometimes  |
+| f9 r    | Boxquote selected region                        | Sometimes  |
+| f9 t    | Insert inactive timestamp                       | Sometimes  |
+| f9 v    | Toggle visible mode (for showing/editing links) | Sometimes  |
+| C-f9    | Previous buffer                                 | Sometimes  |
+| C-f10   | Next buffer                                     | Sometimes  |
+| C-x n r | Narrow to region                                | Sometimes  |
+| f9 f    | Boxquote insert a file                          | Sometimes  |
+| f9 i    | Info manual                                     | Sometimes  |
+| f9 I    | Punch Clock In                                  | Sometimes  |
+| f9 O    | Punch Clock Out                                 | Sometimes  |
+| f9 o    | Switch to org scratch buffer                    | Sometimes  |
+| f9 s    | Switch to scratch buffer                        | Sometimes  |
+| f9 h    | Hide other tasks                                | Rare       |
+| f7      | Toggle line truncation/wrap                     | Rare       |
+| f9 T    | Toggle insert inactive timestamp                | Rare       |
+| C-u C-c C-x C-i | clock history | |
+| C-c a   | Enter Agenda (minimal emacs testing)            | Rare       |
+|  C-u C-u C-c C-x C-i | Now this new task that collects miscellaneous clock minutes when the clock would normally stop. | |
+|F12 < a v m b R | This limits the agenda to this one file | |
+| C-c C-q | The shortcut key is used to add or remove the tag using | |
