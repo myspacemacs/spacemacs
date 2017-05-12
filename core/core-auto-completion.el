@@ -1,7 +1,6 @@
 ;;; core-auto-completion.el --- Spacemacs Core File
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -12,12 +11,19 @@
 
 ;; Company -------------------------------------------------------------------
 
+(defvar spacemacs-default-company-backends
+  '((company-dabbrev-code company-gtags company-etags company-keywords)
+    company-files company-dabbrev)
+  "The list of default company backends used by spacemacs.
+This variable is used to configure mode-specific company backends in spacemacs.
+Backends in this list will always be active in these modes, as well as any
+backends added by individual spacemacs layers.")
+
 (defmacro spacemacs|defvar-company-backends (mode)
   "Define a MODE specific company backend variable with default backends.
 The variable name format is company-backends-MODE."
   `(defvar ,(intern (format "company-backends-%S" mode))
-     '((company-dabbrev-code company-gtags company-etags company-keywords)
-       company-files company-dabbrev)
+     ',spacemacs-default-company-backends
      ,(format "Company backend list for %S" mode)))
 
 (defmacro spacemacs|add-company-hook (mode)
@@ -25,14 +31,18 @@ The variable name format is company-backends-MODE."
 MODE must match the symbol passed in `spacemacs|defvar-company-backends'.
 The initialization function is hooked to `MODE-hook'."
   (let ((mode-hook (intern (format "%S-hook" mode)))
-        (func (intern (format "spacemacs//init-company-%S" mode))))
+        (func (intern (format "spacemacs//init-company-%S" mode)))
+        (backend-list (intern (format "company-backends-%S" mode))))
     `(when (configuration-layer/package-usedp 'company)
        (defun ,func ()
          ,(format "Initialize company for %S" mode)
+         (when auto-completion-enable-snippets-in-popup
+           (setq ,backend-list (mapcar 'spacemacs//show-snippets-in-company
+                                       ,backend-list)))
          (set (make-variable-buffer-local 'auto-completion-front-end)
               'company)
          (set (make-variable-buffer-local 'company-backends)
-              ,(intern (format "company-backends-%S" mode))))
+              ,backend-list))
        (add-hook ',mode-hook ',func t)
        (add-hook ',mode-hook 'company-mode t))))
 
@@ -45,6 +55,13 @@ MODE parameter must match the parameter used in the call to
     `(progn
        (remove-hook ',mode-hook ',func)
        (remove-hook ',mode-hook 'company-mode))))
+
+(defun spacemacs//show-snippets-in-company (backend)
+  (if (or (not auto-completion-enable-snippets-in-popup)
+          (and (listp backend) (member 'company-yasnippet backend)))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
 
 ;; Auto-complete -------------------------------------------------------------
 

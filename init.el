@@ -1,7 +1,6 @@
 ;;; init.el --- Spacemacs Initialization File
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -9,19 +8,32 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
+<<<<<<< HEAD
 (defconst spacemacs-version          "0.101.5" "Spacemacs version.")
 (defconst spacemacs-emacs-min-version   "24.3" "Minimal version of Emacs.")
+=======
+>>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 
-(defun spacemacs/emacs-version-ok ()
-  (version<= spacemacs-emacs-min-version emacs-version))
+;; Without this comment emacs25 adds (package-initialize) here
+;; (package-initialize)
 
-(when (spacemacs/emacs-version-ok)
-  (load-file (concat user-emacs-directory "core/core-load-paths.el"))
+;; Increase gc-cons-threshold, depending on your system you may set it back to a
+;; lower value in your dotfile (function `dotspacemacs/user-config')
+(setq gc-cons-threshold 100000000)
+
+(defconst spacemacs-version          "0.200.9" "Spacemacs version.")
+(defconst spacemacs-emacs-min-version   "24.4" "Minimal version of Emacs.")
+
+(if (not (version<= spacemacs-emacs-min-version emacs-version))
+    (error (concat "Your version of Emacs (%s) is too old. "
+                   "Spacemacs requires Emacs version %s or above.")
+           emacs-version spacemacs-emacs-min-version)
+  (load-file (concat (file-name-directory load-file-name)
+                     "core/core-load-paths.el"))
   (require 'core-spacemacs)
-  (require 'core-configuration-layer)
   (spacemacs/init)
   (configuration-layer/sync)
-  (spacemacs/setup-after-init-hook)
-  (spacemacs/maybe-install-dotfile)
+  (spacemacs-buffer/display-startup-note)
+  (spacemacs/setup-startup-hook)
   (require 'server)
   (unless (server-running-p) (server-start)))

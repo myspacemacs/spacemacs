@@ -1,7 +1,6 @@
 ;;; core-spacemacs.el --- Spacemacs Core File
 ;;
-;; Copyright (c) 2012-2014 Sylvain Benner
-;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -13,42 +12,34 @@
 (defconst emacs-start-time (current-time))
 
 (require 'subr-x nil 'noerror)
-(require 'core-emacs-backports)
+(require 'page-break-lines)
+(require 'core-debug)
+(require 'core-command-line)
+(require 'core-dotspacemacs)
+(require 'core-release-management)
 (require 'core-auto-completion)
+(require 'core-jump)
+(require 'core-display-init)
 (require 'core-themes-support)
 (require 'core-fonts-support)
 (require 'core-spacemacs-buffer)
+(require 'core-keybindings)
 (require 'core-toggle)
+(require 'core-funcs)
 (require 'core-micro-state)
-
-(defconst spacemacs-repository "spacemacs"
-  "Name of the Spacemacs remote repository.")
-(defconst spacemacs-repository-owner "syl20bnr"
-  "Name of the Spacemacs remote repository owner.")
-(defconst spacemacs-checkversion-remote "checkversion"
-  "Name of the remote repository used to check for new version.")
-(defconst spacemacs-checkversion-branch "master"
-  "Name of the branch used to check for new version.")
+(require 'core-transient-state)
+(require 'core-use-package-ext)
 
 (defgroup spacemacs nil
   "Spacemacs customizations."
   :group 'starter-kit
   :prefix 'spacemacs-)
 
-;; new version variables
-(defvar spacemacs-new-version nil
-  "If non-nil a new Spacemacs version is available.")
-(defvar spacemacs-version-check-timer nil
-  "The current timer for new version check.")
-(defvar spacemacs-version-check-interval "6 hours"
-  "Time between two version checks.")
-(defvar spacemacs-version-check-lighter "[+]"
-  "Text displayed in the mode-line when a new version is available.")
-
 ;; loading progress bar variables
 (defvar spacemacs-loading-char ?█)
 (defvar spacemacs-loading-string "")
 (defvar spacemacs-loading-counter 0)
+(defvar spacemacs-loading-value 0)
 ;; (defvar spacemacs-loading-text "Loading")
 ;; (defvar spacemacs-loading-done-text "Ready!")
 (defvar spacemacs-loading-dots-chunk-count 3)
@@ -57,308 +48,175 @@
   (/ spacemacs-loading-dots-count spacemacs-loading-dots-chunk-count))
 (defvar spacemacs-loading-dots-chunk-threshold 0)
 
-(define-derived-mode spacemacs-mode special-mode "Spacemacs"
-  "Spacemacs major mode for startup screen."
-  :group 'spacemacs
-  :syntax-table nil
-  :abbrev-table nil
-  (setq truncate-lines t)
-  ;; motion state since this is a special mode
-  (add-to-list 'evil-motion-state-modes 'spacemacs-mode))
+(defvar spacemacs-post-user-config-hook nil
+  "Hook run after dotspacemacs/user-config")
+(defvar spacemacs-post-user-config-hook-run nil
+  "Whether `spacemacs-post-user-config-hook' has been run")
+
+(defvar spacemacs--default-mode-line mode-line-format
+  "Backup of default mode line format.")
+(defvar spacemacs-initialized nil
+  "Whether or not spacemacs has finished initializing by completing
+the final step of executing code in `emacs-startup-hook'.")
 
 (defun spacemacs/init ()
-  "Create the special buffer for `spacemacs-mode' and perform startup
-initialization."
+  "Perform startup initialization."
+  (when spacemacs-debugp (spacemacs/init-debug))
+  ;; silence ad-handle-definition about advised functions getting redefined
+  (setq ad-redefinition-action 'accept)
+  ;; this is for a smoother UX at startup (i.e. less graphical glitches)
+  (hidden-mode-line-mode)
+  (spacemacs//removes-gui-elements)
+  (spacemacs//setup-ido-vertical-mode)
   ;; explicitly set the prefered coding systems to avoid annoying prompt
   ;; from emacs (especially on Microsoft Windows)
   (prefer-coding-system 'utf-8)
-  ;; dotfile init
+  ;; TODO move these variables when evil is removed from the bootstrapped
+  ;; packages.
+  (setq-default evil-want-C-u-scroll t
+                ;; `evil-want-C-i-jump' is set to nil to avoid `TAB' being
+                ;; overlapped in terminal mode. The GUI specific `<C-i>' is used
+                ;; instead.
+                evil-want-C-i-jump nil)
   (dotspacemacs/load-file)
+  (require 'core-configuration-layer)
   (dotspacemacs|call-func dotspacemacs/init "Calling dotfile init...")
-  ;; spacemacs init
-  (switch-to-buffer (get-buffer-create spacemacs-buffer-name))
-  (spacemacs-buffer/set-mode-line "")
-  ;; no welcome buffer
-  (setq inhibit-startup-screen t)
-  ;; default theme
+  (when dotspacemacs-maximized-at-startup
+    (unless (frame-parameter nil 'fullscreen)
+      (toggle-frame-maximized))
+    (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+  (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init...")
+  (setq dotspacemacs-editing-style (dotspacemacs//read-editing-style-config
+                                    dotspacemacs-editing-style))
+  (configuration-layer/initialize)
+  ;; Apply theme
   (let ((default-theme (car dotspacemacs-themes)))
-    (spacemacs/load-theme default-theme)
+    (condition-case err
+        (spacemacs/load-theme default-theme nil)
+      ('error
+       ;; fallback on Spacemacs default theme
+       (setq spacemacs--default-user-theme default-theme)
+       (setq dotspacemacs-themes (delq spacemacs--fallback-theme
+                                       dotspacemacs-themes))
+       (add-to-list 'dotspacemacs-themes spacemacs--fallback-theme)
+       (setq default-theme spacemacs--fallback-theme)
+       (load-theme spacemacs--fallback-theme t)))
+    ;; protect used themes from deletion as orphans
+    (setq configuration-layer--protected-packages
+          (append
+           (delq nil (mapcar 'spacemacs//get-theme-package
+                             dotspacemacs-themes))
+           configuration-layer--protected-packages))
     (setq-default spacemacs--cur-theme default-theme)
     (setq-default spacemacs--cycle-themes (cdr dotspacemacs-themes)))
+  ;; font
+  (spacemacs|do-after-display-system-init
+   ;; If you are thinking to remove this call to `message', think twice. You'll
+   ;; break the life of several Spacemacser using Emacs in daemon mode. Without
+   ;; this, their chosen font will not be set on the *first* instance of
+   ;; emacsclient, at least if different than their system font. You don't
+   ;; believe me? Go ahead, try it. After you'll have notice that this was true,
+   ;; increase the counter bellow so next people will give it more confidence.
+   ;; Counter = 1
+   (message "Setting the font...")
+   (unless (spacemacs/set-default-font dotspacemacs-default-font)
+     (spacemacs-buffer/warning
+      "Cannot find any of the specified fonts (%s)! Font settings may not be correct."
+      (if (listp (car dotspacemacs-default-font))
+          (mapconcat 'car dotspacemacs-default-font ", ")
+        (car dotspacemacs-default-font)))))
+  ;; spacemacs init
+  (setq inhibit-startup-screen t)
+  (spacemacs-buffer/goto-buffer)
+  (unless (display-graphic-p)
+    ;; explicitly recreate the home buffer for the first GUI client
+    ;; in order to correctly display the logo
+    (spacemacs|do-after-display-system-init
+     (kill-buffer (get-buffer spacemacs-buffer-name))
+     (spacemacs-buffer/goto-buffer)))
+  ;; This is set to nil during startup to allow Spacemacs to show buffers opened
+  ;; as command line arguments.
+  (setq initial-buffer-choice nil)
+  (setq inhibit-startup-screen t)
+  (require 'core-keybindings)
+  ;; for convenience and user support
+  (unless (fboundp 'tool-bar-mode)
+    (spacemacs-buffer/message (concat "No graphical support detected, "
+                                      "you won't be able to launch a "
+                                      "graphical instance of Emacs"
+                                      "with this build.")))
+  ;; check for new version
+  (if dotspacemacs-mode-line-unicode-symbols
+      (setq-default spacemacs-version-check-lighter "[⇪]"))
+  ;; install the dotfile if required
+  (dotspacemacs/maybe-install-dotfile)
+  ;; install user default theme if required
+  (when spacemacs--default-user-theme
+    (spacemacs/load-theme spacemacs--default-user-theme 'install)))
+
+(defun spacemacs//removes-gui-elements ()
+  "Remove the menu bar, tool bar and scroll bars."
   ;; removes the GUI elements
   (when (and (fboundp 'tool-bar-mode) (not (eq tool-bar-mode -1)))
     (tool-bar-mode -1))
+  (unless (spacemacs/window-system-is-mac)
+    (when (and (fboundp 'menu-bar-mode) (not (eq menu-bar-mode -1)))
+      (menu-bar-mode -1)))
   (when (and (fboundp 'scroll-bar-mode) (not (eq scroll-bar-mode -1)))
     (scroll-bar-mode -1))
   ;; tooltips in echo-aera
   (when (and (fboundp 'tooltip-mode) (not (eq tooltip-mode -1)))
-    (tooltip-mode -1))
-  (setq tooltip-use-echo-area t)
-  (unless (eq window-system 'mac)
-    (when (and (fboundp 'menu-bar-mode) (not (eq menu-bar-mode -1)))
-      (menu-bar-mode -1)))
-  ;; for convenience and user support
-  (unless (fboundp 'tool-bar-mode)
-    (spacemacs-buffer/message (concat "No graphical support detected, you won't be"
-                               "able to launch a graphical instance of Emacs"
-                               "with this build.")))
-  ;; font
-  (if (find-font (font-spec :name (car dotspacemacs-default-font)))
-      (spacemacs/set-default-font dotspacemacs-default-font)
-    (spacemacs-buffer/warning "Cannot find font \"%s\"!"
-                              (car dotspacemacs-default-font)))
-  ;; banner
-  (spacemacs-buffer/insert-banner-and-buttons)
-  (setq-default evil-want-C-u-scroll t)
-  ;; Initializing configuration from ~/.spacemacs
-  (dotspacemacs|call-func dotspacemacs/init "Executing user init...")
-  ;; dash is required to prevent a package.el bug with f on 24.3.1
-  (spacemacs/load-or-install-package 'dash t)
-  ;; bind-key is required by use-package
-  (spacemacs/load-or-install-package 'bind-key t)
-  (spacemacs/load-or-install-package 'use-package t)
-  ;; evil and evil-leader must be installed at the beginning of the
-  ;; boot sequence.
-  ;; Use C-u as scroll-up (must be set before actually loading evil)
-  (spacemacs/load-or-install-package 'evil t)
-  (spacemacs/load-or-install-package 'evil-leader t)
-  ;; check for new version
-  (if dotspacemacs-mode-line-unicode-symbols
-      (setq-default spacemacs-version-check-lighter "[⇪]"))
-  (spacemacs/set-new-version-lighter-mode-line-faces)
-  (add-hook 'after-init-hook 'spacemacs-buffer/goto-link-line)
-  (spacemacs-mode))
+    (tooltip-mode -1)))
 
-(defun spacemacs//get-package-directory (pkg)
-  "Return the directory of PKG. Return nil if not found."
-  (let ((elpa-dir (concat user-emacs-directory "elpa/")))
-    (when (file-exists-p elpa-dir)
-      (let ((dir (reduce (lambda (x y) (if x x y))
-                         (mapcar (lambda (x)
-                                   (if (string-match
-                                        (concat "/"
-                                                (symbol-name pkg)
-                                                "-[0-9]+") x) x))
-                                 (directory-files elpa-dir 'full))
-                         :initial-value nil)))
-        (if dir (file-name-as-directory dir))))))
-
-(defun spacemacs/load-or-install-package (pkg &optional log file-to-load)
-  "Load PKG package. PKG will be installed if it is not already installed.
-Whenever the initial require fails the absolute path to the package
-directory is returned.
-If LOG is non-nil a message is displayed in spacemacs-mode buffer.
-FILE-TO-LOAD is an explicit file to load after the installation."
-  (condition-case nil
-      (require pkg)
-    (error
-     ;; not installed, we try to initialize package.el only if required to
-     ;; precious seconds during boot time
-     (require 'cl)
-     (let ((pkg-elpa-dir (spacemacs//get-package-directory pkg)))
-       (if pkg-elpa-dir
-           (add-to-list 'load-path pkg-elpa-dir)
-         ;; install the package
-         (when log
-           (spacemacs-buffer/append
-            (format "(Bootstrap) Installing %s...\n" pkg))
-           (spacemacs//redisplay))
-         (package-refresh-contents)
-         (package-install pkg)
-         (setq pkg-elpa-dir (spacemacs//get-package-directory pkg)))
-       (require pkg nil 'noerror)
-       (when file-to-load
-         (load-file (concat pkg-elpa-dir file-to-load)))
-       pkg-elpa-dir))))
-
-(defun spacemacs/maybe-install-dotfile ()
-  "Install the dotfile if it does not exist."
-  (unless (file-exists-p dotspacemacs-filepath)
-    (spacemacs-buffer/set-mode-line "Dotfile wizard installer")
-    (spacemacs//redisplay)
-    (when (dotspacemacs/install 'with-wizard)
-      (dotspacemacs/sync-configuration-layers)
-      (spacemacs-buffer/append
-       "The dofile has been installed.\n"))))
-
-(defun spacemacs/display-and-copy-version ()
-  "Echo the current spacemacs version and copy it."
-  (interactive)
-  (let ((msg (format "Spacemacs v.%s" spacemacs-version)))
-    (message msg) (kill-new msg)))
+(defun spacemacs//setup-ido-vertical-mode ()
+  "Setup `ido-vertical-mode'."
+  (require 'ido-vertical-mode)
+  (ido-vertical-mode t)
+  (add-hook
+   'ido-setup-hook
+   ;; think about hacking directly `ido-vertical-mode' source in libs instead.
+   (defun spacemacs//ido-vertical-natural-navigation ()
+     ;; more natural navigation keys: up, down to change current item
+     ;; left to go up dir
+     ;; right to open the selected item
+     (define-key ido-completion-map (kbd "<up>") 'ido-prev-match)
+     (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
+     (define-key ido-completion-map (kbd "<left>") 'ido-delete-backward-updir)
+     (define-key ido-completion-map (kbd "<right>") 'ido-exit-minibuffer))))
 
 (defun display-startup-echo-area-message ()
   "Change the default welcome message of minibuffer to another one."
   (message "Spacemacs is ready."))
 
-(defun spacemacs/get-last-version (repo owner remote branch)
-  "Return the last tagged version of BRANCH on REMOTE repository from
-OWNER REPO."
-  (let ((url (format "http://github.com/%s/%s" owner repo)))
-    (unless (spacemacs/git-has-remote remote)
-      (spacemacs/git-declare-remote remote url)))
-  (spacemacs/git-fetch-tags remote branch)
-  (let ((version (spacemacs/git-latest-tag remote branch)))
-    (when version
-      (save-match-data
-        (string-match "^.*\\([0-9]+\\.[0-9]+\\.[0-9]+\\)$" version)
-        (match-string 1 version)))))
+(defun spacemacs/defer-until-after-user-config (func)
+  "Call FUNC if dotspacemacs/user-config has been called. Otherwise,
+defer call using `spacemacs-post-user-config-hook'."
+  (if spacemacs-post-user-config-hook-run
+      (funcall func)
+    (add-hook 'spacemacs-post-user-config-hook func)))
 
-(defun spacemacs/check-for-new-version (&optional interval)
-  "Periodicly check for new for new Spacemacs version.
-Update `spacemacs-new-version' variable if any new version has been
-found."
-  (message "Start checking for new version...")
-  (async-start
-   (lambda ()
-     (load-file (concat user-emacs-directory "core/core-load-paths.el"))
-     (require 'core-spacemacs)
-     (spacemacs/get-last-version spacemacs-repository
-                                 spacemacs-repository-owner
-                                 spacemacs-checkversion-remote
-                                 spacemacs-checkversion-branch))
-   (lambda (result)
-     (if result
-         (if (or (version< result spacemacs-version)
-                 (string= result spacemacs-version)
-                 (if spacemacs-new-version
-                     (string= result spacemacs-new-version)))
-             (message "Spacemacs is up to date.")
-           (message "New version of Spacemacs available: %s" result)
-           (setq spacemacs-new-version result))
-       (message "Unable to check for new version."))))
-  (when interval
-    (setq spacemacs-version-check-timer
-          (run-at-time t (timer-duration interval)
-                       'spacemacs/check-for-new-version))))
-
-(defun spacemacs/git-has-remote (remote)
-  "Return non nil if REMOTE is declared."
-  (let((proc-buffer "git-has-remote")
-       (default-directory user-emacs-directory))
-    (when (eq 0 (process-file "git" nil proc-buffer nil "remote"))
-        (with-current-buffer proc-buffer
-          (prog2
-              (goto-char (point-min))
-              (re-search-forward (format "^%s$" remote) nil 'noerror)
-            (kill-buffer proc-buffer))))))
-
-(defun spacemacs/git-declare-remote (remote url)
-  "Declare a new REMOTE pointing to URL, return t if no error."
-  (let((proc-buffer "git-declare-remote")
-       (default-directory user-emacs-directory))
-    (prog1
-        (eq 0 (process-file "git" nil proc-buffer nil
-                            "remote" "add" remote url))
-      (kill-buffer proc-buffer))))
-
-(defun spacemacs/git-fetch-tags (remote branch)
-  "Fetch the tags for BRANCH in REMOTE repository."
-  (let((proc-buffer "git-fetch-tags")
-       (default-directory user-emacs-directory))
-    (prog2
-        (eq 0 (process-file "git" nil proc-buffer nil
-                            "fetch" remote branch))
-        ;; explicitly fetch the new tags
-        (eq 0 (process-file "git" nil proc-buffer nil
-                            "fetch" "--tags" remote branch))
-      (kill-buffer proc-buffer))))
-
-(defun spacemacs/git-latest-tag (remote branch)
-  "Returns the latest tag on REMOTE/BRANCH."
-  (let((proc-buffer "git-latest-tag")
-       (default-directory user-emacs-directory)
-       (where (format "%s/%s" remote branch)))
-    (when (eq 0 (process-file "git" nil proc-buffer nil
-                              "describe" "--tags" "--abbrev=0"
-                              "--match=v*" where "FETCH_HEAD"))
-      (with-current-buffer proc-buffer
-        (prog1
-            (when (buffer-string)
-                (end-of-buffer)
-                (forward-line -1)
-                (replace-regexp-in-string
-                 "\n$" ""
-                 (buffer-substring (line-beginning-position)
-                                   (line-end-position))))
-          (kill-buffer proc-buffer))))))
-
-(defun spacemacs//deffaces-new-version-lighter (state)
-  "Define a new version lighter face for the given STATE."
-  (let* ((fname (intern (format "spacemacs-mode-line-new-version-lighter-%s-face"
-                                (symbol-name state))))
-         (foreground (face-foreground state)))
-    (eval `(defface ,fname '((t ()))
-             ,(format "Color for new version lighter in mode line (%s)."
-                      (symbol-name state))
-             :group 'spacemacs))
-    (set-face-attribute fname nil
-                        :foreground foreground
-                        :box (face-attribute 'mode-line :box))))
-
-(defun spacemacs/set-new-version-lighter-mode-line-faces ()
-  "Define or set the new version lighter mode-line faces."
-  (mapcar 'spacemacs//deffaces-new-version-lighter
-          '(error warning success)))
-(spacemacs/set-new-version-lighter-mode-line-faces)
-
-(defun spacemacs//compute-version-score (version)
-  "Returns an integer from the version list.
-Example: (1 42 3) = 1 042 003"
-  (let ((result 0)
-        (rev (reverse version)))
-    (dotimes (i 3)
-      (setq result (+ result (* (nth i rev) (expt 10 (* i 3))))))
-    result))
-
-(defun spacemacs//compute-version-score (version)
-  "Returns an integer from the version list.
-Example: (1 42 3) = 1 042 003"
-  (let ((i -1))
-    (reduce '+ (mapcar (lambda (n) (setq i (1+ i)) (* n (expt 10 (* i 3))))
-                       (reverse version)))))
-
-(defun spacemacs/get-new-version-lighter-face (current new)
-  "Return the new version lighter face given the difference between the CURRENT
-version and the NEW version."
-  (let* ((lcur (version-to-list current))
-         (lnew (version-to-list new))
-         (scur (spacemacs//compute-version-score lcur))
-         (snew (spacemacs//compute-version-score lnew))
-         (diff (- snew scur)))
-    (cond
-     ((< diff 3000) 'spacemacs-mode-line-new-version-lighter-success-face)
-     ((< diff 5000) 'spacemacs-mode-line-new-version-lighter-warning-face)
-     (t 'spacemacs-mode-line-new-version-lighter-error-face))))
-
-(defun spacemacs/setup-after-init-hook ()
+(defun spacemacs/setup-startup-hook ()
   "Add post init processing."
   (add-hook
-   'after-init-hook
-   (lambda ()
+   'emacs-startup-hook
+   (defun spacemacs/startup-hook ()
+     ;; This is set here so that emacsclient will show the startup buffer (and
+     ;; so that it can be changed in user-config if necessary). It was set to
+     ;; nil earlier in the startup process to properly handle command line
+     ;; arguments.
+     (setq initial-buffer-choice (lambda () (get-buffer spacemacs-buffer-name)))
      ;; Ultimate configuration decisions are given to the user who can defined
      ;; them in his/her ~/.spacemacs file
-     (dotspacemacs|call-func dotspacemacs/config "Calling dotfile config...")
-     ;; from jwiegley
-     ;; https://github.com/jwiegley/dot-emacs/blob/master/init.el
-     (let ((elapsed (float-time
-                     (time-subtract (current-time) emacs-start-time))))
-       (spacemacs-buffer/append
-        (format "\n[%s packages loaded in %.3fs]\n"
-                (configuration-layer//initialized-packages-count)
-                elapsed)))
-     ;; Display useful lists of items
-     (when dotspacemacs-startup-lists
-       (spacemacs-buffer/insert-startupify-lists))
-     (when configuration-layer-error-count
-       ;; ("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position evil-mode-line-tag
-        ;; (vc-mode vc-mode)
-       ;; "  " mode-line-modes mode-line-misc-info mode-line-end-spaces
-       (spacemacs-buffer/set-mode-line
-        (format (concat "%s error(s) at startup! "
-                        "Spacemacs may not be able to operate properly.")
-                configuration-layer-error-count))
-       (force-mode-line-update))
-     (spacemacs/check-for-new-version spacemacs-version-check-interval))))
+     (dotspacemacs|call-func dotspacemacs/user-config
+                             "Calling dotfile user config...")
+     (run-hooks 'spacemacs-post-user-config-hook)
+     (setq spacemacs-post-user-config-hook-run t)
+     (when (fboundp dotspacemacs-scratch-mode)
+       (with-current-buffer "*scratch*"
+         (funcall dotspacemacs-scratch-mode)))
+     (configuration-layer/display-summary emacs-start-time)
+     (spacemacs-buffer//startup-hook)
+     (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
+     (setq spacemacs-initialized t))))
 
 (provide 'core-spacemacs)
