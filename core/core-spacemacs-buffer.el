@@ -128,24 +128,6 @@ Cate special text banner can de reachable via `998', `cat' or `random*'.
           (spacemacs-buffer//insert-ascii-banner-centered banner))
         (spacemacs-buffer//inject-version))
       (spacemacs-buffer//insert-buttons)
-<<<<<<< HEAD
-      (if (file-exists-p spacemacs-buffer--cache-file)
-          (load spacemacs-buffer--cache-file)
-        (unless (file-exists-p dotspacemacs-filepath)
-          ;; fresh install of spacemacs, the release notes are not displayed
-          (setq spacemacs-buffer--release-note-version spacemacs-version)
-          (spacemacs/dump-vars-to-file
-           '(spacemacs-buffer--release-note-version) spacemacs-buffer--cache-file)))
-      ;; if there is an installed dotfile we check the variable
-      ;; spacemacs-buffer--release-note-version to decide whether
-      ;; we show the release note
-      (when (and (file-exists-p dotspacemacs-filepath)
-                 (or (not spacemacs-buffer--release-note-version)
-                     (version< spacemacs-buffer--release-note-version
-                               spacemacs-version)))
-        (spacemacs-buffer/toggle-release-note))
-=======
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
       (spacemacs//redisplay))))
 
 (defun spacemacs-buffer/display-startup-note ()
@@ -657,12 +639,8 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
   (insert " ")
   (widget-create 'url-link
                  :tag (propertize "Gitter Chat" 'face 'font-lock-keyword-face)
-<<<<<<< HEAD
-                 :help-echo "Ask questions and chat with fellow users in our chat room."
-=======
                  :help-echo
                  "Ask questions and chat with fellow users in our chat room."
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
                  :mouse-face 'highlight
                  :follow-link "\C-m"
                  "https://gitter.im/syl20bnr/spacemacs")
@@ -686,11 +664,7 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                            (configuration-layer/update-packages))
                  :mouse-face 'highlight
                  :follow-link "\C-m"
-<<<<<<< HEAD
-                 (propertize "Update" 'face 'font-lock-keyword-face))
-=======
                  (propertize "Update Packages" 'face 'font-lock-keyword-face))
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
   (insert " ")
   (widget-create 'push-button
                  :help-echo
@@ -699,21 +673,13 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                            (call-interactively 'configuration-layer/rollback))
                  :mouse-face 'highlight
                  :follow-link "\C-m"
-<<<<<<< HEAD
-                 (propertize "Rollback" 'face 'font-lock-keyword-face))
-=======
                  (propertize "Rollback Package Update"
                              'face 'font-lock-keyword-face))
   (spacemacs-buffer//center-line)
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
   (insert "\n")
   (widget-create 'push-button
-<<<<<<< HEAD
-                 :tag (propertize "Release Notes" 'face 'font-lock-preprocessor-face)
-=======
                  :tag (propertize "Release Notes"
                                   'face 'font-lock-preprocessor-face)
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
                  :help-echo "Hide or show the Changelog"
                  :action (lambda (&rest ignore)
                            (spacemacs-buffer/toggle-note 'release-note))
@@ -721,11 +687,6 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                  :follow-link "\C-m")
   (insert " ")
   (widget-create 'url-link
-<<<<<<< HEAD
-                 :tag (propertize "Search in Spacemacs" 'face 'font-lock-function-name-face)
-                 :help-echo "Find Spacemacs package and layer configs using helm-spacemacs."
-                 :action (lambda (&rest ignore) (call-interactively 'helm-spacemacs))
-=======
                  :tag (propertize "Search in Spacemacs"
                                   'face 'font-lock-function-name-face)
                  :help-echo "Search Spacemacs contents."
@@ -738,26 +699,11 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
                            ((configuration-layer/layer-usedp 'ivy)
                             'ivy-spacemacs-help))))
                      (call-interactively comp-frontend)))
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
                  :mouse-face 'highlight
                  :follow-link "\C-m")
   (spacemacs-buffer//center-line)
   (insert "\n\n"))
 
-<<<<<<< HEAD
-(defmacro spacemacs//insert-widget-with-shorcut (shortcut-char search-label)
-  `(define-key spacemacs-mode-map ,shortcut-char (lambda ()
-                                                   (interactive)
-                                                   (unless (search-forward ,search-label (point-max) t)
-                                                     (search-backward ,search-label (point-min) t))
-                                                   (forward-line 1)
-                                                   (back-to-indentation))))
-
-(defun spacemacs-buffer//insert-file-list (list-display-name list shortcut-char)
-  (when (car list)
-    (spacemacs//insert-widget-with-shorcut "r" "Recent Files:")
-    (spacemacs//insert-widget-with-shorcut "p" "Projects:")
-=======
 (defun spacemacs-buffer//insert-string-list (list-display-name list)
   "Insert a non-interactive startup list in the home buffer.
 LIST-DISPLAY-NAME: the displayed title of the list.
@@ -782,7 +728,6 @@ LIST: a list of strings displayed as entries."
 LIST-DISPLAY-NAME: the displayed title of the list.
 LIST: a list of string pathnames made interactive in this function."
   (when (car list)
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
     (insert list-display-name)
     (mapc (lambda (el)
             (insert "\n    ")
@@ -1038,17 +983,6 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
     (with-demoted-errors "spacemacs buffer error: %s"
       (widget-forward 1))))
 
-<<<<<<< HEAD
-;;this feels like the wrong place to put these
-(add-hook 'spacemacs-mode-hook (lambda ()
-                                 (local-set-key [tab] 'widget-forward)
-                                 (local-set-key [S-tab] 'widget-backward)
-                                 ;; S-tab is backtab in terminal
-                                 (local-set-key [backtab] 'widget-backward)
-                                 (local-set-key [return] 'widget-button-press)
-                                 (local-set-key [down-mouse-1] 'widget-button-press)
-                                 ))
-=======
 (defun spacemacs-buffer//startup-hook ()
   "Code executed when Emacs has finished loading."
   (with-current-buffer (get-buffer spacemacs-buffer-name)
@@ -1145,7 +1079,6 @@ Useful for making the home buffer the only visible buffer in the frame."
   (interactive)
   (spacemacs/home)
   (delete-other-windows))
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 
 (provide 'core-spacemacs-buffer)
 

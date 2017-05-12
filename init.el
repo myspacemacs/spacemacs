@@ -8,11 +8,6 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
-<<<<<<< HEAD
-(defconst spacemacs-version          "0.101.5" "Spacemacs version.")
-(defconst spacemacs-emacs-min-version   "24.3" "Minimal version of Emacs.")
-=======
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 
 ;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)

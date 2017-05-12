@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-* Release 0.101.x (2015/04/13)
-=======
 * Release 0.200.x
 ** 0.200.9 (2017/04/06)
 *** Fixes
@@ -3705,7 +3702,6 @@ remove =org-indent-mode= (thanks to darkfeline)
   dguilak, edwintorok, fhzerorubigd, jackwilsonv, jupl, kini, latkins, MadAnd,
   mlsteel, mosic, person808, skwuent, srid, swaroopch and zimbatm)
 * Release 0.101.x
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 ** Hot new features
 *** Choose your own editing style
 Thanks to the new =holy-mode= Spacemacs can now  be used by Vim users
@@ -3725,28 +3721,16 @@ function is still required to consider the package to be used.
 Spacemacs now officially support auto-completion. The old layer
 =company-mode= has been removed and =auto-complete= has been removed
 from the spacemacs layer.
-<<<<<<< HEAD
-They are now part of a new layer called `auto-completion`.
-You'll have to this add layer to your dotfile to enable auto-completion.
-*** Syntax checking
-Flycheck has been removed from the Spacemacs layer and moved to a new
-layer called `syntax-checking`.
-=======
 They are now part of a new layer called =auto-completion=.
 You'll have to this add layer to your dotfile to enable auto-completion.
 *** Syntax checking
 Flycheck has been removed from the Spacemacs layer and moved to a new
 layer called =syntax-checking=.
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 You'll have to add this layer to your dotfile to enable the fly syntax
 checking.
 *** Org
 Org packages have been removed from Spacemacs layer and moved to a new
-<<<<<<< HEAD
-`org` layer.
-=======
 =org= layer.
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 You'll have to add this layer to your dotfile to enable the Org
 configuration of Spacemacs.
 *** New shortcuts in startup buffer
@@ -3970,15 +3954,6 @@ a batch of packages.
 *** Startup Buffer
 - Don't display the release notes in the startup buffer when Emacs is restarted
   after a fresh install
-<<<<<<< HEAD
-- Startup buffer: fix widget activation in `holy-mode` (thanks to tuhdo)
-- Startup buffer: Don't fontify the startup buffer when `rainbow-identifiers`
-*** Auto-completion
-- Fix error when toggling auto-completion in some buffers
-*** Haskell
-- Add new `haskell-snippets` package (fixes error with required `haskell-yas`)
-- Fix missing quote in `haskell-indentation`
-=======
 - Startup buffer: fix widget activation in =holy-mode= (thanks to tuhdo)
 - Startup buffer: Don't fontify the startup buffer when =rainbow-identifiers=
 *** Auto-completion
@@ -3986,7 +3961,6 @@ a batch of packages.
 *** Haskell
 - Add new =haskell-snippets= package (fixes error with required =haskell-yas=)
 - Fix missing quote in =haskell-indentation=
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 *** Org
 - Org layer: exclude ox-gfm since it seems problematic for some users.
   package is used
@@ -3994,20 +3968,10 @@ a batch of packages.
 - Fix auto-completion activation.
 *** Themes
 - Fix conflict between official Spacemacs solarized theme and
-<<<<<<< HEAD
-  `color-theme-solarized` declared in `themes-megapack` layer.
-- Add rules for all base16 themes (thanks to mkaito)
-*** Various Fixes
-- revert back `ag` as the default search tool instead of `pt`, `pt` can
-  conflict with `pt` command line tool from TCL parser tools.
-** Backports
-None
-=======
   =color-theme-solarized= declared in =themes-megapack= layer.
 - Add rules for all base16 themes (thanks to mkaito)
 *** Various Fixes
 - revert back =ag= as the default search tool instead of =pt=, =pt= can
   conflict with =pt= command line tool from TCL parser tools.
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
 * Previous Releases
 - See Github release page

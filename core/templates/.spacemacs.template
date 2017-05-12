@@ -279,10 +279,7 @@ values."
    dotspacemacs-persistent-server nil
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
-<<<<<<< HEAD
-=======
    ;; (default '("ag" "pt" "ack" "grep"))
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.

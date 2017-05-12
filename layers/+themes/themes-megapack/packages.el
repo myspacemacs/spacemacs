@@ -27,10 +27,6 @@
     clues-theme
     color-theme-sanityinc-solarized
     color-theme-sanityinc-tomorrow
-<<<<<<< HEAD:contrib/themes-megapack/packages.el
-    colorsarenice-theme
-=======
->>>>>>> 8e1af145480d53e8d32cdff2c83291889903164b:layers/+themes/themes-megapack/packages.el
     cyberpunk-theme
     dakrone-theme
     darkburn-theme
