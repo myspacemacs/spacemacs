@@ -24,6 +24,7 @@
    - [[#why-do-i-get-4m-characters-inside-ansi-term][Why do I get '4m' characters inside ansi-term?]]
    - [[#why-are-my-font-settings-not-being-respected][Why are my font settings not being respected?]]
    - [[#why-am-i-getting-a-message-about-environment-variables-on-startup][Why am I getting a message about environment variables on startup?]]
+   - [[#i-want-to-learn-elisp-where-do-i-start-][I want to learn elisp, where do I start ?]]
  - [[#how-do-i][How do I:]]
    - [[#install-a-package-not-provided-by-a-layer][Install a package not provided by a layer?]]
    - [[#disable-a-package-completely][Disable a package completely?]]
@@ -151,15 +152,15 @@ should not be loaded before =dotspacemacs/user-config=, otherwise both versions
 will be loaded and will conflict.
 
 Because of autoloading, calling to =org= functions will trigger the loading up
-of the =org= shipped with emacs wich will induce conflicts. One way to avoid
+of the =org= shipped with emacs which will induce conflicts. One way to avoid
 conflict is to wrap your =org= config code in a =with-eval-after-load= block
 like this:
 
 #+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'org
-  ;; here goes your Org config :)
-  ;; ....
-  )
+  (with-eval-after-load 'org
+    ;; Org config goes here
+    ;; ....
+    )
 #+END_SRC
 
 ** Why is Spacemacs hanging on startup?
@@ -200,7 +201,7 @@ Instead, call =helm-M-x= first, select the command you want to run, and press
 In the terminal version of Emacs, color themes will not render correctly as
 colors are rendered by the terminal and not by emacs. You will probably have to
 change your terminal color palette. More explanations can be found on
-[[https://github.com/sellout/emacs-color-theme-solarized#important-note-for-terminal-users][emacs-color-theme-solarized webpage]].
+[[https://github.com/sellout/emacs-color-theme-solarized#user-content-important-note-for-terminal-users][emacs-color-theme-solarized webpage]].
 
 ** Typing quickly =fd= takes me out of =insert state=. What is going on?
 This is a feature of Spacemacs, enabling you to easily escape from a lot of
@@ -261,6 +262,13 @@ warning, e.g. from =dotspacemacs/user-init=:
 You can also disable this feature entirely by adding =exec-path-from-shell= to
 the list =dotspacemacs-excluded-packages= if you prefer setting =exec-path=
 yourself.
+
+** I want to learn elisp, where do I start ?
+Very quick start: [[http://learnxinyminutes.com/docs/elisp/][learn X in Y minutes (where X is elisp)]]
+
+Practical reference with code examples for various situations that you will
+encounter: [[http://caiorss.github.io/Emacs-Elisp-Programming/][http://caiorss.github.io/Emacs-Elisp-Programming/]], more particularly
+sections [[http://caiorss.github.io/Emacs-Elisp-Programming/Elisp_Programming.html][Elisp Programming]] and [[http://caiorss.github.io/Emacs-Elisp-Programming/Elisp_Snippets.html][Elisp code snippets]].
 
 * How do I:
 :PROPERTIES:
@@ -424,11 +432,11 @@ For instance, if you want to switch ~SPC S~ (spelling) with ~SPC d~ (used by
 dash) to make the former easier to reach, you can use:
 
 #+BEGIN_SRC emacs-lisp
-(defun dear-leader/swap-keys (key1 key2)
-  (let ((map1 (lookup-key spacemacs-default-map key1))
-        (map2 (lookup-key spacemacs-default-map key2)))
-    (spacemacs/set-leader-keys key1 map2 key2 map1)))
-(dear-leader/swap-keys "S" "d")
+  (defun dear-leader/swap-keys (key1 key2)
+    (let ((map1 (lookup-key spacemacs-default-map key1))
+          (map2 (lookup-key spacemacs-default-map key2)))
+      (spacemacs/set-leader-keys key1 map2 key2 map1)))
+  (dear-leader/swap-keys "S" "d")
 #+END_SRC
 
 If you want to define your own alias, like using ~SPC é~ (because it's a not
@@ -496,7 +504,7 @@ the new configuration. This can be achieved easily using the following steps:
 
 #+BEGIN_SRC sh
 mkdir ~/spacemacs
-git clone git@github.com:syl20bnr/spacemacs.git ~/spacemacs/.emacs.d
+git clone https://github.com/syl20bnr/spacemacs.git ~/spacemacs/.emacs.d
 HOME=~/spacemacs emacs
 #+END_SRC
 
@@ -521,7 +529,7 @@ some expressions to the search input:
   ending with =.el= which are emacs-lisp files.
 
 - By using a flag like =--python= which should be self-explaining. The list of
-  available flags colud be accessed from terminal with:
+  available flags could be accessed from terminal with:
 
   #+begin_src shell
   ag --list-file-types
@@ -585,4 +593,4 @@ If this returns =nil=, you need to install the GnuTLS DLL file in the same
 directory as Emacs. See [[https://www.gnu.org/software/emacs/manual/html_mono/emacs-gnutls.html#Help-For-Users][here]] for instructions.
 
 ** The powerline isn't shown correctly when Spacemacs is used within =PuTTY=
-You can follow [[http://mschulte.nl/posts/using-powerline-in-PuTTY.html][this explanation]] explaining how to correct this.
+You can follow [[http://webcache.googleusercontent.com/search?q=cache:CsTK3URgUr8J:mschulte.nl/nl/posts/using-powerline-in-PuTTY.html][this explanation]] explaining how to correct this.

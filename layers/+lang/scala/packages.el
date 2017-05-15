@@ -11,8 +11,10 @@
 
 (setq scala-packages
   '(
+    eldoc
     ensime
     flycheck
+    flyspell
     ggtags
     helm-gtags
     noflet
@@ -21,23 +23,25 @@
     sbt-mode
     ))
 
-(defun scala/init-ensime ()
+(defun scala/post-init-eldoc ()
+  (when scala-enable-eldoc
+    (add-hook 'scala-mode-hook #'spacemacs//java-setup-ensime-eldoc)))
+
+(defun scala/pre-init-ensime ()
+  (spacemacs|use-package-add-hook ensime
+    :pre-config (add-to-list 'java--ensime-modes 'scala-mode)))
+
+(defun scala/post-init-ensime ()
   (use-package ensime
     :defer t
     :init
-    ;; note ensime-mode is hooked to scala-mode-hook automatically by
-    ;; ensime-mode via an autoload
     (progn
-      (spacemacs/register-repl 'ensime 'ensime-inf-switch "ensime")
-      (when scala-enable-eldoc
-        (add-hook 'ensime-mode-hook 'scala/enable-eldoc))
-      (add-hook 'scala-mode-hook 'scala/configure-flyspell)
-      (add-hook 'scala-mode-hook 'scala/configure-ensime)
+      (add-hook 'scala-mode-hook #'spacemacs//scala-setup-ensime)
       (when scala-auto-start-ensime
-        (add-hook 'scala-mode-hook 'scala/maybe-start-ensime))
-      (add-to-list 'spacemacs-jump-handlers-scala-mode 'ensime-edit-definition))
+        (add-hook 'scala-mode-hook 'spacemacs//ensime-maybe-start)))
     :config
     (progn
+<<<<<<< HEAD
       (setq ensime-startup-dirname (expand-file-name "ensime" spacemacs-cache-directory))
 
       (evil-define-key 'insert ensime-mode-map
@@ -187,13 +191,23 @@
 
         (add-hook 'ensime-mode-hook 'scala/disable-flycheck-scala))
 
+=======
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
       ;; Enable Expand Region integration from Ensime.  Ignore load errors to
       ;; handle older Ensime versions gracefully.
       (when (configuration-layer/package-usedp 'expand-region)
         (require 'ensime-expand-region nil 'noerror)))))
 
 (defun scala/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'scala-mode))
+  (spacemacs/enable-flycheck 'scala-mode)
+  ;; Don't use scala checker if ensime mode is active, since it provides
+  ;; better error checking.
+  (with-eval-after-load 'flycheck
+    (add-hook 'ensime-mode-hook 'spacemacs//scala-disable-flycheck-scala)))
+
+(defun scala/post-init-flyspell ()
+  (spell-checking/add-flyspell-hook 'scala-mode)
+  (add-hook 'scala-mode-hook #'spacemacs//java-setup-ensime-flyspell))
 
 (defun scala/init-noflet ()
   (use-package noflet))
@@ -248,15 +262,16 @@ it can be undone."
             (insert (cdr arrow)))))
 
       (defun scala/gt ()
-        "Insert a `>' to the buffer. If it's part of a right arrow (`->' or `=>'),
-replace it with the corresponding unicode arrow."
+        "Insert a `>' to the buffer.
+If it's part of a right arrow (`->' or `=>'),replace it with the corresponding
+unicode arrow."
         (interactive)
         (insert ">")
         (scala/replace-arrow-at-point))
 
       (defun scala/hyphen ()
-        "Insert a `-' to the buffer. If it's part of a left arrow (`<-'),
-replace it with the unicode arrow."
+        "Insert a `-' to the buffer.
+If it's part of a left arrow (`<-'),replace it with the unicode arrow."
         (interactive)
         (insert "-")
         (scala/replace-arrow-at-point))
@@ -272,7 +287,8 @@ replace it with the unicode arrow."
       ;; Compatibility with `aggressive-indent'
       (setq scala-indent:align-forms t
             scala-indent:align-parameters t
-            scala-indent:default-run-on-strategy scala-indent:operator-strategy))))
+            scala-indent:default-run-on-strategy
+            scala-indent:operator-strategy))))
 
 (defun scala/post-init-ggtags ()
   (add-hook 'scala-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))

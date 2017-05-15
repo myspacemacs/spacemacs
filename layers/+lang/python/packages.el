@@ -65,18 +65,23 @@
         (evil--jumps-push)))))
 
 (defun python/post-init-company ()
-  (spacemacs|add-company-hook python-mode)
-  (spacemacs|add-company-hook inferior-python-mode)
-  (push '(company-files company-capf) company-backends-inferior-python-mode)
-  (add-hook 'inferior-python-mode-hook (lambda ()
-                                         (setq-local company-minimum-prefix-length 0)
-                                         (setq-local company-idle-delay 0.5))))
+  (spacemacs|add-company-backends
+    :backends (company-files company-capf)
+    :modes inferior-python-mode
+    :variables
+    company-minimum-prefix-length 0
+    company-idle-delay 0.5)
+  (when (configuration-layer/package-usedp 'pip-requirements)
+    (spacemacs|add-company-backends
+      :backends company-capf
+      :modes pip-requirements-mode)))
 
 (defun python/init-company-anaconda ()
   (use-package company-anaconda
     :defer t
-    :init
-    (push 'company-anaconda company-backends-python-mode)))
+    :init (spacemacs|add-company-backends
+            :backends company-anaconda
+            :modes python-mode)))
 
 (defun python/init-cython-mode ()
   (use-package cython-mode
@@ -98,7 +103,7 @@
   (add-hook `python-mode-hook `turn-on-evil-matchit-mode))
 
 (defun python/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'python-mode))
+  (spacemacs/enable-flycheck 'python-mode))
 
 (defun python/pre-init-helm-cscope ()
   (spacemacs|use-package-add-hook xcscope
@@ -165,12 +170,7 @@
 
 (defun python/init-pip-requirements ()
   (use-package pip-requirements
-    :defer t
-    :init
-    (progn
-      ;; company support
-      (push 'company-capf company-backends-pip-requirements-mode)
-      (spacemacs|add-company-hook pip-requirements-mode))))
+    :defer t))
 
 (defun python/init-py-isort ()
   (use-package py-isort
@@ -445,4 +445,9 @@ fix this issue."
       (spacemacs/set-leader-keys-for-major-mode 'python-mode
         "=" 'yapfify-buffer)
       (when python-enable-yapf-format-on-save
+<<<<<<< HEAD
         (add-hook 'python-mode-hook 'yapf-mode)))))
+=======
+        (add-hook 'python-mode-hook 'yapf-mode)))
+    :config (spacemacs|hide-lighter yapf-mode)))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

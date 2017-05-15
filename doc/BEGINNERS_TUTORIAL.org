@@ -2,6 +2,7 @@
 
 * Beginners tutorial                                      :TOC_4_gh:noexport:
  - [[#why-spacemacs][Why Spacemacs?]]
+<<<<<<< HEAD
  - [[#install][Install]]
    - [[#1-install-emacs][1. Install Emacs]]
    - [[#2-install-git][2. Install Git]]
@@ -9,6 +10,9 @@
      - [[#note-for-windows-users][Note for Windows users]]
    - [[#4-install-the-default-font][4. Install the default font]]
    - [[#5-open-spacemacs-and-choose-default-editing-style][5. Open Spacemacs and choose default editing style]]
+=======
+ - [[#installation-and-setup][Installation and setup]]
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
  - [[#getting-started][Getting started]]
    - [[#keybinding-notation][Keybinding notation]]
    - [[#modal-text-editing---why-and-how][Modal text editing - why and how?]]
@@ -34,6 +38,7 @@
 - Powerful modes for programming in dozens of programming languages
 - Deeply customizable yet beginner-friendly
 
+<<<<<<< HEAD
 * Install
  Spacemacs is a beginner-friendly and powerful extension of a popular text
  editor called Emacs. To install Spacemacs you need to first install base Emacs
@@ -103,6 +108,13 @@ logo), restart Spacemacs.
 
 Now your installation process is complete, congratulations! For troubleshooting,
 see the last section.
+=======
+* Installation and setup
+ Spacemacs is a beginner-friendly and powerful extension of a popular text
+ editor called Emacs. To install Spacemacs you need to first install base Emacs
+ and then download the Spacemacs extension files, which is most easily done by
+ using a program called Git. The steps are easy and detailed in the [[https://github.com/syl20bnr/spacemacs/blob/master/README.md#prerequisites][readme]].
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 * Getting started
 ** Keybinding notation
@@ -111,6 +123,10 @@ Emacs, we will use Emacs conventions for keybinding notation. The most important
 modifier keys are:
 
 ~SPC~ = ~Space~, used as the leader key in Vim editing style.
+<<<<<<< HEAD
+=======
+~RET~ = ~Return~ (also known as ~Enter~)
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 ~C-~ = ~Ctrl~
 ~M-~ (for "meta") = ~Alt~
 ~S-~ = ~Shift~
@@ -168,7 +184,11 @@ touch-typing) and without using modifier keys.
 The modal editing features of Spacemacs originate from a text editor called Vi,
 and thus the modal editing tutorial is called eVIl tutor. Press ~SPC h T~ (that
 is, the spacebar followed by ~h~ and ~T~) to familiarize yourself with
+<<<<<<< HEAD
 modal editig.
+=======
+modal editing.
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 ** Using the spacebar to launch commands
 Now that you are familiar with writing and editing text it is time to put the
@@ -223,30 +243,51 @@ buffer.
 
 ** Accessing files
 Files can be accessed under the ~SPC f~ mnemonic. You can navigate to any file
+<<<<<<< HEAD
 with ~SPC f f~ and open it by pressing enter. Accessing recently opened files is
+=======
+with ~SPC f f~ and open it by pressing ~RET~. Accessing recently opened files is
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 a very common task and is done with ~SPC f r~. An edited file is saved with
 ~SPC f s~.
 
 * Configuring Spacemacs
+<<<<<<< HEAD
 :PROPERTIES:
 :CUSTOM_ID: configuring-spacemacs
 :END:
+=======
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 ** Adding language support and other features: using layers
 Spacemacs divides its configuration into self-contained units called
 configuration layers. These layers are stacked on top of each other to achieve a
 custom configuration.
 
+<<<<<<< HEAD
 By default Spacemacs uses a dotfile called ~/.spacemacs to control which layers
+=======
+By default Spacemacs uses a dotfile called =~/.spacemacs= to control which layers
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 to load. Within this file you can also configure certain features. First, split
 the window vertically to view both this tutorial and the dotfile simultaneously
 (~SPC w /~). Open the dotfile by pressing ~SPC f e d~. Navigate to the line
 starting with "dotspacemacs-configuration-layers". The following lines have
+<<<<<<< HEAD
 further instructions: uncomment org and git layers if you want to be
 familiarized with them. More layers for different languages and tools can be
 found on [[https://github.com/syl20bnr/spacemacs/tree/master/layers][github]] or by pressing ~SPC h SPC~. The added layers will be installed
 upon restart of Spacemacs.
 
 Mac users: add the osx layer to use the OS X keybindings!
+=======
+further instructions: uncomment =org= and =git= layers if you want to be
+familiarized with them. More [[file:../layers/LAYERS.org][layers]] for different languages and tools can be
+found by pressing ~SPC h SPC~. The added layers will be installed upon restart
+of Spacemacs.
+
+Some layers require third-party tools that you'll have to install via your
+favorite package manager. The layer readme will tell if this is the case.
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 ** Changing the colour theme
 You can toggle the theme by ~SPC T n~. This cycles between currently
@@ -254,7 +295,11 @@ activated themes. You can find more by adding the themes-megapack layer and
 activate them by writing their names in the dotspacemacs-themes list.
 
 ** Starting maximized
+<<<<<<< HEAD
 Editing the dotspacemacs-maximized-at-startup variable from nil to t will start
+=======
+Editing the =dotspacemacs-maximized-at-startup= variable from =nil= to =t= will start
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 Spacemacs maximized.
 
 ** Quitting
@@ -270,6 +315,7 @@ and effective plain-text system", but this gives only a small inkling of its
 versatility. If you do any kind of writing at all, chances are that Org mode
 will make it easier and more fun. This tutorial was written in Org mode.
 
+<<<<<<< HEAD
 Install the Org layer and open this tutorial. Press ~S-TAB~ repeatedly and
 observe that this cycles the visibility of the contents of different headlines.
 Press t in normal mode and observe that you can add TODO tags on headlines.
@@ -279,6 +325,20 @@ the document around.
 This is not even scratching the surface of Org mode, so you should look into its
 [[https://github.com/syl20bnr/spacemacs/blob/master/layers/%252Bemacs/org/README.org][documentation]] for more information. Googling for Org mode tutorials is also very
 helpful in finding out the most useful features of it!
+=======
+Install the Org layer and open this tutorial. Make a copy named test.org with
+~SPC f c~ somewhere outside of the .emacs.d directory. Write
+~SPC SPC org-mode RET~ to switch to org mode from the write-only documentation mode.
+
+Press ~S-TAB~ repeatedly and observe that this cycles the visibility of the
+contents of different headlines. Press ~t~ in normal mode and observe that you
+can add TODO tags on headlines. Press ~M-k~ or ~M-j~ in normal mode and see how
+you can quickly move parts of the document around.
+
+This is not even scratching the surface of Org mode, so you should look into
+[[../layers/+emacs/org/README.org][org layer]] with ~SPC h SPC org~ for more information. Googling for Org mode
+tutorials is also very helpful in finding out the most useful features of it!
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 ** Version control - the intelligent way
 Version control means keeping track of the changes and edits you have made to
@@ -318,9 +378,15 @@ This is useful outside of Spacemacs as well!
 
 ** Troubleshooting and further info
 ~SPC ?~ shows you the keybindings in the current major mode, which is often
+<<<<<<< HEAD
 helpful. For troubleshooting, please refer to the FAQ by pressing ~SPC f e f~ or
 [[https://github.com/syl20bnr/spacemacs/blob/master/doc/FAQ.org][online]]. More help is found under ~SPC h~, and with ~SPC h ~SPC~ you can access
 the comprehensive Spacemacs documentation, including this tutorial and the layer
+=======
+helpful. For troubleshooting, please refer to the [[file:FAQ.org][FAQ]] by pressing ~SPC f e f~.
+More help is found under ~SPC h~, and with ~SPC h ~SPC~ you can access the
+comprehensive Spacemacs documentation, including this tutorial and the layer
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 documents.
 
 The [[https://gitter.im/syl20bnr/spacemacs][Gitter chat]] can be used to ask questions if the answer cannot be found in

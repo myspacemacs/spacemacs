@@ -13,18 +13,32 @@
                         edit-server
                         gmail-message-mode
                         flymd
+<<<<<<< HEAD
+=======
+                        markdown-mode
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
                         ))
 
 (defun chrome/init-edit-server ()
   (use-package edit-server
-    :init
-    (progn
-      (edit-server-start))
-    :config
-    (progn
-      (setq edit-server-default-major-mode 'markdown-mode))
-    ))
+    :init (edit-server-start)
+    :config (setq edit-server-default-major-mode 'markdown-mode)))
 
+(defun chrome/init-gmail-message-mode ()
+  (use-package gmail-message-mode
+    :defer t
+    :config
+    (when (configuration-layer/layer-usedp 'markdown)
+      (spacemacs/set-markdown-keybindings
+       'gmail-message-client-mode gmail-message-client-mode-map))))
+
+(defun chrome/init-flymd ()
+  (use-package flymd
+    :defer t
+    :init (setq flymd-browser-open-function
+                'spacemacs//flymd-browser-function)))
+
+<<<<<<< HEAD
 (defun chrome/init-gmail-message-mode ( )
   (use-package gmail-message-mode))
 
@@ -50,3 +64,10 @@
 
       (setq flymd-browser-open-function 'my-flymd-browser-function)
       )))
+=======
+(defun chrome/pre-init-markdown-mode ()
+  (spacemacs|use-package-add-hook markdown-mode
+    :pre-config
+    (when (configuration-layer/package-usedp 'gmail-message-mode)
+      (add-to-list 'markdown--key-bindings-modes 'gmail-message-client-mode))))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

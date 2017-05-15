@@ -40,9 +40,15 @@ Example:
 * Key bindings
 ** Global
 
+<<<<<<< HEAD
 | Key Binding | Description                   |
 |-------------+-------------------------------|
 | ~SPC b B~   | open IBuffer menu (global)    |
+=======
+| Key Binding | Description                |
+|-------------+----------------------------|
+| ~SPC b B~   | open IBuffer menu (global) |
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 *Note:* The layer will also replace regular ~C-x C-b~ with =ibuffer=.
 

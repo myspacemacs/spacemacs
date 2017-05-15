@@ -13,7 +13,6 @@
       '(
         ;; default
         adaptive-wrap
-        auto-highlight-symbol
         column-enforce-mode
         hide-comnt
         highlight-indentation
@@ -35,6 +34,7 @@
     (progn
       (add-hook 'visual-line-mode-hook 'adaptive-wrap-prefix-mode))))
 
+<<<<<<< HEAD
 (defun spacemacs-editing-visual/init-auto-highlight-symbol ()
   (use-package auto-highlight-symbol
     :defer t
@@ -272,6 +272,8 @@
         ("r" ahs-change-range)
         ("q" nil :exit t)))))
 
+=======
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun spacemacs-editing-visual/init-column-enforce-mode ()
   (use-package column-enforce-mode
     :commands (column-enforce-mode global-column-enforce-mode)

@@ -41,6 +41,11 @@
     :override-mode-name spacemacs-leader-override-mode))
 
 (defun spacemacs-bootstrap/init-evil ()
+  ;; ensure that the search module is set at startup
+  ;; must be called before evil is required to really take effect.
+  (spacemacs/set-evil-search-module dotspacemacs-editing-style)
+  (add-hook 'spacemacs-editing-style-hook 'spacemacs/set-evil-search-module)
+
   ;; evil-mode is mandatory for Spacemacs to work properly
   ;; evil must be require explicitly, the autoload seems to not
   ;; work properly sometimes.
@@ -76,13 +81,15 @@
            (set (intern (format "evil-%s-state-cursor" state))
                 (list (when dotspacemacs-colorize-cursor-according-to-state color)
                       cursor)))
-
   (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
+<<<<<<< HEAD
   ;; put back refresh of the cursor on post-command-hook see status of:
   ;; https://bitbucket.org/lyro/evil/issue/502/cursor-is-not-refreshed-in-some-cases
   ;; (add-hook 'post-command-hook 'evil-refresh-cursor)
 
+=======
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
   ;; evil ex-command
   (define-key evil-normal-state-map (kbd dotspacemacs-ex-command-key) 'evil-ex)
   (define-key evil-visual-state-map (kbd dotspacemacs-ex-command-key) 'evil-ex)
@@ -140,17 +147,50 @@
   ;; scrolling transient state
   (spacemacs|define-transient-state scroll
     :title "Scrolling Transient State"
+    :doc "
+ Buffer^^^^              Full page^^^^     Half page^^^^        Line/column^^^^
+ ──────^^^^───────────── ─────────^^^^──── ─────────^^^^─────── ───────────^^^^─────
+ [_<_/_>_] beginning/end [_f_/_b_] down/up [_J_/_K_] down/up    [_j_/_k_] down/up
+  ^ ^ ^ ^                 ^ ^ ^ ^          [_H_/_L_] left/right [_h_/_l_] left/right
+  ^ ^ ^ ^                 ^ ^ ^ ^          [_d_/_u_] down/up     ^ ^ ^ ^"
     :bindings
-    ("," evil-scroll-page-up "page up")
-    ("." evil-scroll-page-down "page down")
+    ;; buffer
+    ("<" evil-goto-first-line)
+    (">" evil-goto-line)
+    ;; full page
+    ("f" evil-scroll-page-down)
+    ("b" evil-scroll-page-up)
     ;; half page
-    ("<" evil-scroll-up "half page up")
-    (">" evil-scroll-down "half page down"))
+    ("d" evil-scroll-down)
+    ("u" evil-scroll-up)
+    ("J" evil-scroll-down)
+    ("K" evil-scroll-up)
+    ("H" evil-scroll-left)
+    ("L" evil-scroll-right)
+    ;; lines and columns
+    ("j" evil-scroll-line-down)
+    ("k" evil-scroll-line-up)
+    ("h" evil-scroll-column-left)
+    ("l" evil-scroll-column-right))
   (spacemacs/set-leader-keys
-    "n," 'spacemacs/scroll-transient-state/evil-scroll-page-up
-    "n." 'spacemacs/scroll-transient-state/evil-scroll-page-down
-    "n<" 'spacemacs/scroll-transient-state/evil-scroll-up
-    "n>" 'spacemacs/scroll-transient-state/evil-scroll-down)
+    ;; buffer
+    "N<" 'spacemacs/scroll-transient-state/evil-goto-first-line
+    "N>" 'spacemacs/scroll-transient-state/evil-goto-line
+    ;; full page
+    "Nf" 'spacemacs/scroll-transient-state/evil-scroll-page-down
+    "Nb" 'spacemacs/scroll-transient-state/evil-scroll-page-up
+    ;; half page
+    "Nd" 'spacemacs/scroll-transient-state/evil-scroll-down
+    "Nu" 'spacemacs/scroll-transient-state/evil-scroll-up
+    "NJ" 'spacemacs/scroll-transient-state/evil-scroll-down
+    "NK" 'spacemacs/scroll-transient-state/evil-scroll-up
+    "NH" 'spacemacs/scroll-transient-state/evil-scroll-left
+    "NL" 'spacemacs/scroll-transient-state/evil-scroll-right
+    ;; lines and columns
+    "Nj" 'spacemacs/scroll-transient-state/evil-scroll-line-down
+    "Nk" 'spacemacs/scroll-transient-state/evil-scroll-line-up
+    "Nh" 'spacemacs/scroll-transient-state/evil-scroll-column-left
+    "Nl" 'spacemacs/scroll-transient-state/evil-scroll-column-right)
 
   ;; pasting transient-state
   (evil-define-command spacemacs//transient-state-0 ()
@@ -216,6 +256,10 @@
   (spacemacs|define-text-object "-" "hyphen" "-" "-")
   (spacemacs|define-text-object "~" "tilde" "~" "~")
   (spacemacs|define-text-object "=" "equal" "=" "=")
+  (spacemacs|define-text-object "«" "double-angle-bracket" "«" "»")
+  (spacemacs|define-text-object "｢" "corner-bracket" "｢" "｣")
+  (spacemacs|define-text-object "‘" "single-quotation-mark" "‘" "’")
+  (spacemacs|define-text-object "“" "double-quotation-mark" "“" "”")
   (evil-define-text-object evil-pasted (count &rest args)
     (list (save-excursion (evil-goto-mark ?\[) (point))
           (save-excursion (evil-goto-mark ?\]) (point))))
@@ -251,7 +295,11 @@
       (kbd "C-j") 'comint-next-input))
   (evil-define-key 'normal comint-mode-map
     (kbd "C-k") 'comint-previous-input
-    (kbd "C-j") 'comint-next-input))
+    (kbd "C-j") 'comint-next-input)
+
+  ;; ignore repeat
+  (evil-declare-ignore-repeat 'spacemacs/next-error)
+  (evil-declare-ignore-repeat 'spacemacs/previous-error))
 
 (defun spacemacs-bootstrap/init-hydra ()
   (require 'hydra)

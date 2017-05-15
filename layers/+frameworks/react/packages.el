@@ -11,7 +11,6 @@
 
 (setq react-packages
       '(
-        company
         company-tern
         emmet-mode
         evil-matchit
@@ -23,11 +22,11 @@
         web-mode
         ))
 
-(defun react/post-init-company ()
-  (spacemacs|add-company-hook react-mode))
-
 (defun react/post-init-company-tern ()
-  (push 'company-tern company-backends-react-mode))
+  (spacemacs|add-company-backends :backends company-tern :modes react-mode))
+
+(defun react/post-init-emmet-mode ()
+  (add-hook 'react-mode-hook 'emmet-mode))
 
 (defun react/post-init-emmet-mode ()
   (add-hook 'react-mode-hook 'emmet-mode))
@@ -44,7 +43,11 @@
     (dolist (checker '(javascript-eslint javascript-standard))
       (flycheck-add-mode checker 'react-mode)))
   (add-hook 'react-mode-hook #'spacemacs//react-use-eslint-from-node-modules)
+<<<<<<< HEAD
   (spacemacs/add-flycheck-hook 'react-mode))
+=======
+  (spacemacs/enable-flycheck 'react-mode))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun react/post-init-js-doc ()
   (add-hook 'react-mode-hook 'spacemacs/js-doc-require)

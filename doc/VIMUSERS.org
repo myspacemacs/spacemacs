@@ -270,7 +270,7 @@ customization. The syntax is simple:
     )
 
   ;; Calling a function
-  (func-name arg1 arg1)
+  (func-name arg1 arg2)
 #+end_src
 
 Here is an example of a function that is useful in real life:
@@ -317,14 +317,15 @@ this:
 
 You can uncomment these suggested layers by deleting the semi-colons for a nice
 out-of-the-box experience. To add a layer, add its name to the list and restart
-Emacs or press ~SPC f e R~ . To view all layers and their documentation use ~SPC
-h SPC~.
+Emacs or press ~SPC f e R~ . To view all layers and their documentation use
+~SPC h SPC~.
 
 ** Creating a Layer
 To group configuration or when configuration doesn't fit well in your
 =.spacemacs= file, you can create a configuration layer. Spacemacs provides a
-builtin command to generate the layer boilerplate: ~SPC SPC
-configuration-layer/create-layer~. This generates a folder that looks like this:
+builtin command to generate the layer boilerplate:
+~SPC SPC configuration-layer/create-layer RET~. This generates a folder that
+looks like this:
 
 #+BEGIN_EXAMPLE
     [layer-name]
@@ -342,7 +343,7 @@ configuration-layer/create-layer~. This generates a folder that looks like this:
 #+END_EXAMPLE
 
 The =packages.el= file contains a list of packages that you can install in the
-variable =<layer-name>-packages=. Any package that is available on the [[http:melpa.org][MELPA]]
+variable =<layer-name>-packages=. Any package that is available on the [[http://melpa.org][MELPA]]
 repository can be added to the list. A list can also exclude packages using the
 =:excluded t= property.
 Each package requires a function to initialize it. The function /must/ be named
@@ -396,12 +397,12 @@ one can understand. Thanks to [[https://github.com/jwiegley/use-package][use-pac
 that allows easy lazy-loading and configuration of packages. Here are the basics
 to using it:
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; Basic form of use-package declaration. The :defer t tells use-package to
   ;; try to lazy load the package.
   (use-package package-name
     :defer t)
-  ;; The :init section is run before the package loads The :config section is
+  ;; The :init section is run before the package loads. The :config section is
   ;; run after the package loads
   (use-package package-name
     :defer t
@@ -416,7 +417,7 @@ to using it:
     (progn
       ;; Calling a function that is defined when the package loads
       (function-defined-when-package-loads)))
-#+end_src
+#+END_SRC
 
 This is just a very basic overview of =use-package=. There are many other ways
 to control how a package loads using it that aren't covered here.

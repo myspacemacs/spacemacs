@@ -16,6 +16,7 @@
 (defun spacemacs/ansible-maybe-enable ()
   (when (spacemacs//ansible-should-enable?)
     (ansible 1)))
+<<<<<<< HEAD
 
 (defun spacemacs/ansible-company-maybe-enable ()
   "Add the ansible company backend only for when ansible mode is active."
@@ -29,3 +30,14 @@
 (defun spacemacs//ansible-reset-buffer-modified ()
   "Force the modified buffer flag to nil."
   (set-buffer-modified-p nil))
+=======
+
+(defun spacemacs/ansible-company-maybe-enable ()
+  "Add the ansible company backend only for when ansible mode is active."
+  (when (spacemacs//ansible-should-enable?)
+    (add-to-list 'company-backends 'company-ansible)))
+
+(defun spacemacs/ansible-doc-maybe-enable ()
+  (when (spacemacs//ansible-should-enable?)
+    (ansible-doc-mode 1)))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

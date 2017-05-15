@@ -12,17 +12,32 @@
 (setq common-lisp-packages
       '(auto-highlight-symbol
         (common-lisp-snippets :toggle (configuration-layer/package-usedp 'yasnippet))
+        evil
         ggtags
         helm
         helm-gtags
         slime
+<<<<<<< HEAD
         slime-company))
+=======
+        (slime-company :toggle (configuration-layer/package-usedp 'company))))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun common-lisp/post-init-auto-highlight-symbol ()
   (with-eval-after-load 'auto-highlight-symbol
     (add-to-list 'ahs-plugin-bod-modes 'lisp-mode)))
 
 (defun common-lisp/init-common-lisp-snippets ())
+
+(defun common-lisp/post-init-evil ()
+  (defadvice slime-last-expression (around evil activate)
+    "In normal-state or motion-state, last sexp ends at point."
+    (if (and (not evil-move-beyond-eol)
+             (or (evil-normal-state-p) (evil-motion-state-p)))
+        (save-excursion
+          (unless (or (eobp) (eolp)) (forward-char))
+          ad-do-it)
+      ad-do-it)))
 
 (defun common-lisp/post-init-helm ()
   (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
@@ -35,7 +50,15 @@
   (spacemacs/helm-gtags-define-keys-for-mode 'common-lisp-mode))
 
 (defun common-lisp/init-slime-company ()
+<<<<<<< HEAD
   (setq slime-company-completion 'fuzzy))
+=======
+  (spacemacs|use-package-add-hook slime
+    :pre-config
+    (progn
+      (setq slime-company-completion 'fuzzy)
+      (add-to-list 'slime-contribs 'slime-company))))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun common-lisp/init-slime ()
   (use-package slime
@@ -43,7 +66,8 @@
     :init
     (progn
       (spacemacs/register-repl 'slime 'slime)
-      (setq slime-contribs '(slime-fancy
+      (setq slime-contribs '(slime-asdf
+                             slime-fancy
                              slime-indentation
                              slime-sbcl-exts
                              slime-scratch)
@@ -78,6 +102,7 @@
         "ef" 'slime-eval-defun
         "eF" 'slime-undefine-function
         "ee" 'slime-eval-last-expression
+        "el" 'spacemacs/slime-eval-sexp-end-of-line
         "er" 'slime-eval-region
 
         "gb" 'slime-pop-find-definition-stack

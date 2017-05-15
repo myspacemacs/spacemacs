@@ -13,6 +13,7 @@
    - [[#notifications][Notifications]]
      - [[#os-notifications][OS notifications]]
      - [[#mode-line-notifications][Mode-line notifications]]
+   - [[#spacemacs-layout-integration][Spacemacs layout integration]]
  - [[#see-also][See also]]
 
 * Install
@@ -157,7 +158,7 @@ count of unread messages to the modeline.
 [[https://raw.githubusercontent.com/iqbalansari/mu4e-alert/master/screenshots/mu4e-alert-in-action.png]]
 
 For an extended documentation of the available customizations please refer to
-[[https://github.com/iqbalansari/mu4e-alert#customizations][mu4e-alert's documentation]]
+[[https://github.com/iqbalansari/mu4e-alert#user-content-customizations][mu4e-alert's documentation]]
 
 *** OS notifications
 To enable notifications about new messages, add the following line to your
@@ -202,6 +203,20 @@ or use layer variables when you add the layer to
 
 #+BEGIN_SRC emacs-lisp
   (mu4e :variables mu4e-enable-mode-line t)
+#+END_SRC
+
+** Spacemacs layout integration
+A [[file:../../../doc/DOCUMENTATION.org::#layouts-and-workspaces][Spacemacs custom layout]] is defined by the layer. The name and the key binding
+for it can be customized with the following layer variables:
+- =mu4e-spacemacs-layout-name= for the layout name,
+- =mu4e-spacemacs-layout-binding= for the key binding.
+
+By default the values are:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-configuration-layers '(
+  (mu4e :variables mu4e-spacemacs-layout-name "@Mu4e"
+                   mu4e-spacemacs-layout-binding "m")))
 #+END_SRC
 
 * See also

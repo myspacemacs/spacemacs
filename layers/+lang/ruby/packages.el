@@ -20,6 +20,10 @@
         ggtags
         helm-gtags
         minitest
+<<<<<<< HEAD
+=======
+        org
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
         popwin
         rbenv
         robe
@@ -47,8 +51,10 @@
               "bo" 'bundle-open))))
 
 (defun ruby/post-init-company ()
-  (spacemacs|add-company-hook ruby-mode)
-  (spacemacs|add-company-hook enh-ruby-mode)
+  (when (configuration-layer/package-usedp 'robe)
+    (spacemacs|add-company-backends
+      :backends company-robe
+      :modes ruby-mode enh-ruby-mode))
   (with-eval-after-load 'company-dabbrev-code
     (dolist (mode '(ruby-mode enh-ruby-mode))
       (push mode company-dabbrev-code-modes))))
@@ -77,8 +83,8 @@
     (add-hook hook `turn-on-evil-matchit-mode)))
 
 (defun ruby/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'ruby-mode)
-  (spacemacs/add-flycheck-hook 'enh-ruby-mode))
+  (spacemacs/enable-flycheck 'ruby-mode)
+  (spacemacs/enable-flycheck 'enh-ruby-mode))
 
 (defun ruby/post-init-ggtags ()
   (add-hook 'ruby-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
@@ -107,6 +113,13 @@
           "tr" 'minitest-rerun
           "ts" 'minitest-verify-single)))))
 
+<<<<<<< HEAD
+=======
+(defun ruby/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(ruby . t))))
+
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun ruby/post-init-popwin ()
   (push '("*rspec-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
         popwin:special-display-config)
@@ -128,9 +141,6 @@
       (spacemacs/register-repl 'robe 'robe-start "robe")
       (dolist (hook '(ruby-mode-hook enh-ruby-mode-hook))
         (add-hook hook 'robe-mode))
-      (when (configuration-layer/package-usedp 'company)
-        (push 'company-robe company-backends-enh-ruby-mode)
-        (push 'company-robe company-backends-ruby-mode))
       (spacemacs/add-to-hooks 'robe-jump
                        '(spacemacs-jump-handlers-ruby-mode
                          spacemacs-jump-handlers-enh-ruby-mode)))

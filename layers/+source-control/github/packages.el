@@ -12,10 +12,10 @@
 (setq github-packages
       '(
         gist
-        github-browse-file
         github-clone
         github-search
         magit-gh-pulls
+        magithub
         ;; this package does not exits, we need it to wrap
         ;; the call to spacemacs/declare-prefix.
         (spacemacs-github :location built-in)
@@ -37,11 +37,6 @@
         "ggl" 'gist-list
         "ggr" 'gist-region
         "ggR" 'gist-region-private))))
-
-(defun github/init-github-browse-file ()
-  (use-package github-browse-file
-    :defer t
-    :init (spacemacs/set-leader-keys "gho" 'github-browse-file)))
 
 (defun github/init-github-clone ()
   (use-package github-clone
@@ -74,6 +69,15 @@
         :init (define-key magit-mode-map "#" 'spacemacs/load-gh-pulls-mode)
         :config
         (spacemacs|diminish magit-gh-pulls-mode "Github-PR")))))
+
+(defun github/init-magithub ()
+  (use-package magithub
+    :defer t
+    :after magit
+    :config
+    (progn
+      (magithub-feature-autoinject t)
+      (define-key magit-status-mode-map "@" #'magithub-dispatch-popup))))
 
 (defun github/init-spacemacs-github ()
   (spacemacs/declare-prefix "gh" "github"))

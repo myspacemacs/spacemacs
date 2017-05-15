@@ -25,8 +25,10 @@
     ))
 
 (defun elixir/post-init-company ()
-  (spacemacs|add-company-hook elixir-mode)
-  (spacemacs|add-company-hook alchemist-iex-mode))
+  (when (configuration-layer/package-usedp 'alchemist)
+    (spacemacs|add-company-backends
+      :backends alchemist-company
+      :modes elixir-mode alchemist-iex-mode)))
 
 (defun elixir/init-alchemist ()
   (use-package alchemist
@@ -37,9 +39,6 @@
       (add-hook 'elixir-mode-hook 'alchemist-mode)
       (setq alchemist-project-compile-when-needed t
             alchemist-test-status-modeline nil)
-      ;; setup company backends
-      (push 'alchemist-company company-backends-elixir-mode)
-      (push 'alchemist-company company-backends-alchemist-iex-mode)
       (add-to-list 'spacemacs-jump-handlers-elixir-mode
                 'alchemist-goto-definition-at-point))
     :config
@@ -73,12 +72,11 @@
       "h:" 'alchemist-help
       "hH" 'alchemist-help-history
       "hh" 'alchemist-help-search-at-point
-      "hr" 'alchemist-help-search-marked-region
+      "hr" 'alchemist-help--search-marked-region
 
       "m:" 'alchemist-mix
       "mc" 'alchemist-mix-compile
       "mx" 'alchemist-mix-run
-      "mh" 'alchemist-mix-help
 
       "'"  'alchemist-iex-run
       "sc" 'alchemist-iex-compile-this-buffer
@@ -93,9 +91,9 @@
       "ta" 'alchemist-mix-test
       "tb" 'alchemist-mix-test-this-buffer
       "tt" 'alchemist-mix-test-at-point
-      "tf" 'alchemist-test-file
-      "tn" 'alchemist-test-jump-to-next-test
-      "tp" 'alchemist-test-jump-to-previous-test
+      "tf" 'alchemist-mix-test-file
+      "tn" 'alchemist-test-mode-jump-to-next-test
+      "tp" 'alchemist-test-mode-jump-to-previous-test
       "tr" 'alchemist-mix-rerun-last-test
 
       "xb" 'alchemist-execute-this-buffer
@@ -142,7 +140,11 @@
     :defer t))
 
 (defun elixir/post-init-flycheck ()
+<<<<<<< HEAD
   (spacemacs/add-flycheck-hook 'elixir-mode))
+=======
+  (spacemacs/enable-flycheck 'elixir-mode))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun elixir/pre-init-org ()
   (spacemacs|use-package-add-hook org

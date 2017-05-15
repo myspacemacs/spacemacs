@@ -12,7 +12,7 @@ eshell/history
 .emacs.desktop.lock
 eshell/alias
 eshell/lastdir
-/url/cookies
+url/*
 my-org/
 org-files/
 semanticdb/
@@ -47,4 +47,9 @@ python-*-docs-html
 
 # Private directory
 /games/
+<<<<<<< HEAD
 .git2
+=======
+/doc/COMMUNITY.org
+/doc/CONTRIBUTING.org
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

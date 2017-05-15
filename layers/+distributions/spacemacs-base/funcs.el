@@ -59,7 +59,8 @@ A COUNT argument matches the indentation to the next COUNT lines."
 ;; from Prelude
 ;; TODO: dispatch these in the layers
 (defvar spacemacs-indent-sensitive-modes
-  '(coffee-mode
+  '(asm-mode
+    coffee-mode
     elm-mode
     haml-mode
     haskell-mode
@@ -240,7 +241,11 @@ Dedicated (locked) windows are left untouched."
       (set-window-buffer w2 b1)
       (unrecord-window-buffer w1 b1)
       (unrecord-window-buffer w2 b2)))
+<<<<<<< HEAD
   (when follow-focus-p (select-window-by-number windownum)))
+=======
+  (when follow-focus-p (winum-select-window-by-number windownum)))
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (dotimes (i 9)
   (let ((n (+ i 1)))
@@ -292,9 +297,12 @@ projectile cache when it's possible and update recentf list."
 
 ;; from magnars
 (defun spacemacs/rename-current-buffer-file ()
-  "Renames current buffer and file it is visiting."
+  "Rename the current buffer and the file it is visiting.
+If the buffer isn't visiting a file, ask if it should
+be saved to a file, or just renamed."
   (interactive)
   (let* ((name (buffer-name))
+<<<<<<< HEAD
         (filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
         (error "Buffer '%s' is not visiting a file!" name)
@@ -311,12 +319,59 @@ projectile cache when it's possible and update recentf list."
                (set-visited-file-name new-name)
                (set-buffer-modified-p nil)
                (when (fboundp 'recentf-add-file)
+=======
+         (filename (buffer-file-name)))
+    (if (and filename (file-exists-p filename))
+        ;; the buffer is visiting a file
+        (let* ((dir (file-name-directory filename))
+               (new-name (read-file-name "New name: " dir)))
+          (cond ((get-buffer new-name)
+                 (error "A buffer named '%s' already exists!" new-name))
+                (t
+                 (let ((dir (file-name-directory new-name)))
+                   (when (and (not (file-exists-p dir))
+                              (yes-or-no-p
+                               (format "Create directory '%s'?" dir)))
+                     (make-directory dir t)))
+                 (rename-file filename new-name 1)
+                 (rename-buffer new-name)
+                 (set-visited-file-name new-name)
+                 (set-buffer-modified-p nil)
+                 (when (fboundp 'recentf-add-file)
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
                    (recentf-add-file new-name)
                    (recentf-remove-if-non-kept filename))
-               (when (and (configuration-layer/package-usedp 'projectile)
-                          (projectile-project-p))
-                 (call-interactively #'projectile-invalidate-cache))
-               (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
+                 (when (and (configuration-layer/package-usedp 'projectile)
+                            (projectile-project-p))
+                   (call-interactively #'projectile-invalidate-cache))
+                 (message "File '%s' successfully renamed to '%s'"
+                          name (file-name-nondirectory new-name)))))
+      ;; the buffer is not visiting a file
+      (let ((key))
+        (while (not (memq key '(?s ?r)))
+          (setq key (read-key (propertize
+                               (format
+                                (concat "Buffer '%s' is not visiting a file: "
+                                        "[s]ave to file or [r]ename buffer?")
+                                name) 'face 'minibuffer-prompt)))
+          (cond ((eq key ?s)            ; save to file
+                 ;; this allows for saving a new empty (unmodified) buffer
+                 (unless (buffer-modified-p) (set-buffer-modified-p t))
+                 (save-buffer))
+                ((eq key ?r)            ; rename buffer
+                 (let ((new-name (read-string "New buffer name: ")))
+                   (while (get-buffer new-name)
+                     ;; ask to rename again, if the new buffer name exists
+                     (if (yes-or-no-p
+                          (format (concat "A buffer named '%s' already exists: "
+                                          "Rename again?") new-name))
+                         (setq new-name (read-string "New buffer name: "))
+                       (keyboard-quit)))
+                   (rename-buffer new-name)
+                   (message "Buffer '%s' successfully renamed to '%s'"
+                            name new-name)))
+                ;; ?\a = C-g, ?\e = Esc and C-[
+                ((memq key '(?\a ?\e)) (keyboard-quit))))))))
 
 (defun spacemacs/delete-file (filename &optional ask-user)
   "Remove specified file or directory.
@@ -491,11 +546,45 @@ If the universal prefix argument is used then will the windows too."
   (ediff-files (dotspacemacs/location)
                (concat dotspacemacs-template-directory ".spacemacs.template")))
 
-(defun spacemacs/new-empty-buffer ()
-  "Create a new buffer called untitled(<n>)"
+(defun spacemacs/new-empty-buffer (&optional split)
+  "Create a new buffer called untitled(<n>).
+A SPLIT argument with the value: `left',
+`below', `above' or `right', opens the new
+buffer in a split window."
   (interactive)
   (let ((newbuf (generate-new-buffer-name "untitled")))
-    (switch-to-buffer newbuf)))
+    (case split
+      ('left  (split-window-horizontally))
+      ('below (spacemacs/split-window-vertically-and-switch))
+      ('above (split-window-vertically))
+      ('right (spacemacs/split-window-horizontally-and-switch)))
+    ;; pass non-nil force-same-window to prevent `switch-to-buffer' from
+    ;; displaying buffer in another window
+    (switch-to-buffer newbuf nil 'force-same-window)))
+
+(defun spacemacs/new-empty-buffer-left ()
+  "Create a new buffer called untitled(<n>),
+in a split window to the left."
+  (interactive)
+  (spacemacs/new-empty-buffer 'left))
+
+(defun spacemacs/new-empty-buffer-below ()
+  "Create a new buffer called untitled(<n>),
+in a split window below."
+  (interactive)
+  (spacemacs/new-empty-buffer 'below))
+
+(defun spacemacs/new-empty-buffer-above ()
+  "Create a new buffer called untitled(<n>),
+in a split window above."
+  (interactive)
+  (spacemacs/new-empty-buffer 'above))
+
+(defun spacemacs/new-empty-buffer-right ()
+  "Create a new buffer called untitled(<n>),
+in a split window to the right."
+  (interactive)
+  (spacemacs/new-empty-buffer 'right))
 
 ;; from https://gist.github.com/timcharper/493269
 (defun spacemacs/split-window-vertically-and-switch ()
@@ -545,19 +634,33 @@ If the universal prefix argument is used then will the windows too."
       (insert "\n")
       (setq count (1- count)))))
 
-;; from https://github.com/gempesaw/dotemacs/blob/emacs/dg-defun.el
+;; see https://github.com/gempesaw/dotemacs/blob/emacs/dg-elisp/dg-defun.el
+(defun spacemacs/rudekill-matching-buffers (regexp &optional internal-too)
+  "Kill - WITHOUT ASKING - buffers whose name matches the specified REGEXP. See
+the `kill-matching-buffers` for grateful killing. The optional 2nd argument
+indicates whether to kill internal buffers too.
+
+Returns the count of killed buffers."
+  (let* ((buffers (remove-if-not
+                   (lambda (buffer)
+                     (let ((name (buffer-name buffer)))
+                       (and name (not (string-equal name ""))
+                            (or internal-too (/= (aref name 0) ?\s))
+                            (string-match regexp name))))
+                   (buffer-list))))
+    (mapc 'kill-buffer buffers)
+    (length buffers)))
+
 (defun spacemacs/kill-matching-buffers-rudely (regexp &optional internal-too)
-  "Kill buffers whose name matches the specified REGEXP. This
-function, unlike the built-in `kill-matching-buffers` does so
-WITHOUT ASKING. The optional second argument indicates whether to
-kill internal buffers too."
+  "Kill - WITHOUT ASKING - buffers whose name matches the specified REGEXP. See
+the `kill-matching-buffers` for grateful killing. The optional 2nd argument
+indicates whether to kill internal buffers too.
+
+Returns a message with the count of killed buffers."
   (interactive "sKill buffers matching this regular expression: \nP")
-  (dolist (buffer (buffer-list))
-    (let ((name (buffer-name buffer)))
-      (when (and name (not (string-equal name ""))
-                 (or internal-too (/= (aref name 0) ?\s))
-                 (string-match regexp name))
-        (kill-buffer buffer)))))
+  (message
+   (format "%d buffer(s) killed."
+           (spacemacs/rudekill-matching-buffers regexp internal-too))))
 
 ;; advise to prevent server from closing
 
@@ -772,6 +875,10 @@ the right."
 (spacemacs|create-align-repeat-x "bar" "|")
 (spacemacs|create-align-repeat-x "left-paren" "(")
 (spacemacs|create-align-repeat-x "right-paren" ")" t)
+(spacemacs|create-align-repeat-x "left-curly-brace" "{")
+(spacemacs|create-align-repeat-x "right-curly-brace" "}" t)
+(spacemacs|create-align-repeat-x "left-square-brace" "\\[")
+(spacemacs|create-align-repeat-x "right-square-brace" "\\]" t)
 (spacemacs|create-align-repeat-x "backslash" "\\\\")
 
 ;; END align functions
@@ -837,6 +944,7 @@ A non-nil argument sorts in reverse order."
 
 (defun spacemacs/sort-lines-reverse ()
   "Sort lines in reverse order, in a region or the current buffer."
+<<<<<<< HEAD
   (interactive)
   (spacemacs/sort-lines -1))
 
@@ -852,6 +960,31 @@ A non-nil argument sorts in reverse order."
 (defun spacemacs/sort-lines-by-column-reverse ()
   "Sort lines by the selected column in reverse order."
   (interactive)
+=======
+  (interactive)
+  (spacemacs/sort-lines -1))
+
+(defun spacemacs/sort-lines-by-column (&optional reverse)
+  "Sort lines by the selected column,
+using a visual block/rectangle selection.
+A non-nil argument sorts in REVERSE order."
+  (interactive "P")
+  (if (and
+       ;; is there an active selection
+       (or (region-active-p) (evil-visual-state-p))
+       ;; is it a block or rectangle selection
+       (or (eq evil-visual-selection 'block) (eq rectangle-mark-mode t))
+       ;; is the selection height 2 or more lines
+       (>= (1+ (- (line-number-at-pos (region-end))
+                  (line-number-at-pos (region-beginning)))) 2))
+      (sort-columns reverse (region-beginning) (region-end))
+    (error "Sorting by column requires a block/rect selection on 2 or more lines.")))
+
+(defun spacemacs/sort-lines-by-column-reverse ()
+"Sort lines by the selected column in reverse order,
+using a visual block/rectangle selection."
+  (interactive)
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
   (spacemacs/sort-lines-by-column -1))
 
 ;; BEGIN linum mouse helpers
@@ -1005,16 +1138,38 @@ a split-side entry, its value must be usable as the SIDE argument for
   (let ((buffer (find-file-noselect file)))
     (pop-to-buffer buffer '(spacemacs//display-in-split (split-side . below)))))
 
+<<<<<<< HEAD
 (defun spacemacs/switch-to-scratch-buffer ()
   "Switch to the `*scratch*' buffer. Create it first if needed."
   (interactive)
+=======
+(defun spacemacs/switch-to-scratch-buffer (&optional arg)
+  "Switch to the `*scratch*' buffer, creating it first if needed.
+if prefix argument ARG is given, switch to it in an other, possibly new window."
+  (interactive "P")
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
   (let ((exists (get-buffer "*scratch*")))
-    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (if arg
+        (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
+      (switch-to-buffer (get-buffer-create "*scratch*")))
     (when (and (not exists)
                (not (eq major-mode dotspacemacs-scratch-mode))
                (fboundp dotspacemacs-scratch-mode))
       (funcall dotspacemacs-scratch-mode))))
 
+<<<<<<< HEAD
+=======
+(defun spacemacs/switch-to-messages-buffer (&optional arg)
+  "Switch to the `*Messages*' buffer.
+if prefix argument ARG is given, switch to it in an other, possibly new window."
+  (interactive "P")
+  (with-current-buffer (messages-buffer)
+    (goto-char (point-max))
+    (if arg
+        (switch-to-buffer-other-window (current-buffer))
+      (switch-to-buffer (current-buffer)))))
+
+>>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun spacemacs/close-compilation-window ()
   "Close the window containing the '*compilation*' buffer."
   (interactive)
