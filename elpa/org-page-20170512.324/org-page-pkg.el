@@ -1,4 +1,4 @@
-(define-package "org-page" "20170511.1950" "a static site generator based on org mode"
+(define-package "org-page" "20170512.324" "a static site generator based on org mode"
   '((ht "1.5")
     (simple-httpd "1.4.6")
     (mustache "0.22")
