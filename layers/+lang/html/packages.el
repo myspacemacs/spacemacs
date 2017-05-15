@@ -31,25 +31,15 @@
     ))
 
 (defun html/post-init-company ()
-<<<<<<< HEAD
-  (spacemacs|add-company-hook css-mode))
-=======
   (spacemacs|add-company-backends
     :backends company-css
     :modes css-mode))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
-;;TODO: whenever company-web makes a backend for haml-mode it should be added here. -- @robbyoconnor
 (defun html/init-company-web ()
   (use-package company-web
     :defer t
     :init
     (progn
-<<<<<<< HEAD
-      (spacemacs|add-company-hook jade-mode)
-      (spacemacs|add-company-hook slim-mode)
-      (spacemacs|add-company-hook web-mode))))
-=======
       (spacemacs|add-company-backends
         :backends (company-web-html company-css)
         :modes web-mode
@@ -62,7 +52,6 @@
       (spacemacs|add-company-backends
         :backends company-web-slim
         :modes slim-mode))))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun html/init-css-mode ()
   (use-package css-mode
@@ -154,8 +143,7 @@
 (defun html/init-pug-mode ()
   (use-package pug-mode
     :defer t
-    :mode ("\\.pug$" . pug-mode)
-    :init (push 'company-web-jade company-backends-jade-mode)))
+    :mode ("\\.pug$" . pug-mode)))
 
 (defun html/init-sass-mode ()
   (use-package sass-mode
@@ -169,8 +157,7 @@
 
 (defun html/init-slim-mode ()
   (use-package slim-mode
-    :defer t
-    :init (push 'company-web-slim company-backends-slim-mode)))
+    :defer t))
 
 (defun html/post-init-smartparens ()
   (spacemacs/add-to-hooks
@@ -193,13 +180,6 @@
 (defun html/init-web-mode ()
   (use-package web-mode
     :defer t
-<<<<<<< HEAD
-    :init
-    (progn
-      (push '(company-web-html company-css) company-backends-web-mode)
-      (add-hook 'web-mode-hook 'spacemacs//company-web-minimum-prefix-length))
-=======
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
     :config
     (progn
       (spacemacs/declare-prefix-for-mode 'web-mode "me" "errors")

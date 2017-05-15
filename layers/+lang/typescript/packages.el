@@ -20,24 +20,16 @@
         ))
 
 (defun typescript/post-init-company ()
-<<<<<<< HEAD
-  (spacemacs|add-company-hook typescript-mode))
-=======
   (when (configuration-layer/package-usedp 'tide)
     (spacemacs|add-company-backends
       :backends company-tide
       :modes typescript-mode)))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun typescript/post-init-eldoc ()
   (add-hook 'typescript-mode-hook 'eldoc-mode))
 
 (defun typescript/post-init-flycheck ()
-<<<<<<< HEAD
-  (spacemacs/add-flycheck-hook 'typescript-mode))
-=======
   (spacemacs/enable-flycheck 'typescript-mode))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun typescript/init-tide ()
   (use-package tide
@@ -50,11 +42,7 @@
         (kbd "C-j") 'tide-find-next-reference
         (kbd "C-l") 'tide-goto-reference)
       (add-hook 'typescript-mode-hook 'tide-setup)
-<<<<<<< HEAD
-      (push 'company-tide company-backends-typescript-mode))
-=======
       (add-to-list 'spacemacs-jump-handlers-typescript-mode 'tide-jump-to-definition))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
     :config
     (progn
       (spacemacs/declare-prefix-for-mode 'typescript-mode "mg" "goto")

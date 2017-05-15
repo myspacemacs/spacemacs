@@ -20,10 +20,7 @@
         ggtags
         helm-gtags
         minitest
-<<<<<<< HEAD
-=======
         org
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
         popwin
         rbenv
         robe
@@ -113,13 +110,10 @@
           "tr" 'minitest-rerun
           "ts" 'minitest-verify-single)))))
 
-<<<<<<< HEAD
-=======
 (defun ruby/pre-init-org ()
   (spacemacs|use-package-add-hook org
     :post-config (add-to-list 'org-babel-load-languages '(ruby . t))))
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun ruby/post-init-popwin ()
   (push '("*rspec-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
         popwin:special-display-config)

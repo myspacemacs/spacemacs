@@ -241,11 +241,7 @@ Dedicated (locked) windows are left untouched."
       (set-window-buffer w2 b1)
       (unrecord-window-buffer w1 b1)
       (unrecord-window-buffer w2 b2)))
-<<<<<<< HEAD
-  (when follow-focus-p (select-window-by-number windownum)))
-=======
   (when follow-focus-p (winum-select-window-by-number windownum)))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (dotimes (i 9)
   (let ((n (+ i 1)))
@@ -302,24 +298,6 @@ If the buffer isn't visiting a file, ask if it should
 be saved to a file, or just renamed."
   (interactive)
   (let* ((name (buffer-name))
-<<<<<<< HEAD
-        (filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
-      (let* ((dir (file-name-directory filename))
-             (new-name (read-file-name "New name: " dir)))
-        (cond ((get-buffer new-name)
-               (error "A buffer named '%s' already exists!" new-name))
-              (t
-               (let ((dir (file-name-directory new-name)))
-                 (when (and (not (file-exists-p dir)) (yes-or-no-p (format "Create directory '%s'?" dir)))
-                   (make-directory dir t)))
-               (rename-file filename new-name 1)
-               (rename-buffer new-name)
-               (set-visited-file-name new-name)
-               (set-buffer-modified-p nil)
-               (when (fboundp 'recentf-add-file)
-=======
          (filename (buffer-file-name)))
     (if (and filename (file-exists-p filename))
         ;; the buffer is visiting a file
@@ -338,7 +316,6 @@ be saved to a file, or just renamed."
                  (set-visited-file-name new-name)
                  (set-buffer-modified-p nil)
                  (when (fboundp 'recentf-add-file)
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
                    (recentf-add-file new-name)
                    (recentf-remove-if-non-kept filename))
                  (when (and (configuration-layer/package-usedp 'projectile)
@@ -944,23 +921,6 @@ A non-nil argument sorts in reverse order."
 
 (defun spacemacs/sort-lines-reverse ()
   "Sort lines in reverse order, in a region or the current buffer."
-<<<<<<< HEAD
-  (interactive)
-  (spacemacs/sort-lines -1))
-
-(defun spacemacs/sort-lines-by-column (&optional reverse)
-  "Sort lines by the selected column.
-A non-nil argument sorts in reverse order."
-  (interactive "P")
-  (let* ((region-active (or (region-active-p) (evil-visual-state-p)))
-         (beg (if region-active (region-beginning) (point-min)))
-         (end (if region-active (region-end) (point-max))))
-    (sort-columns reverse beg end)))
-
-(defun spacemacs/sort-lines-by-column-reverse ()
-  "Sort lines by the selected column in reverse order."
-  (interactive)
-=======
   (interactive)
   (spacemacs/sort-lines -1))
 
@@ -984,7 +944,6 @@ A non-nil argument sorts in REVERSE order."
 "Sort lines by the selected column in reverse order,
 using a visual block/rectangle selection."
   (interactive)
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
   (spacemacs/sort-lines-by-column -1))
 
 ;; BEGIN linum mouse helpers
@@ -1138,16 +1097,10 @@ a split-side entry, its value must be usable as the SIDE argument for
   (let ((buffer (find-file-noselect file)))
     (pop-to-buffer buffer '(spacemacs//display-in-split (split-side . below)))))
 
-<<<<<<< HEAD
-(defun spacemacs/switch-to-scratch-buffer ()
-  "Switch to the `*scratch*' buffer. Create it first if needed."
-  (interactive)
-=======
 (defun spacemacs/switch-to-scratch-buffer (&optional arg)
   "Switch to the `*scratch*' buffer, creating it first if needed.
 if prefix argument ARG is given, switch to it in an other, possibly new window."
   (interactive "P")
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
   (let ((exists (get-buffer "*scratch*")))
     (if arg
         (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
@@ -1157,8 +1110,6 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
                (fboundp dotspacemacs-scratch-mode))
       (funcall dotspacemacs-scratch-mode))))
 
-<<<<<<< HEAD
-=======
 (defun spacemacs/switch-to-messages-buffer (&optional arg)
   "Switch to the `*Messages*' buffer.
 if prefix argument ARG is given, switch to it in an other, possibly new window."
@@ -1169,7 +1120,6 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
         (switch-to-buffer-other-window (current-buffer))
       (switch-to-buffer (current-buffer)))))
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun spacemacs/close-compilation-window ()
   "Close the window containing the '*compilation*' buffer."
   (interactive)

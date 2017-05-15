@@ -12,8 +12,6 @@
 (defun spacemacs/activate-mmm-mode ()
   ;; Enable `mmm-mode'.
   (mmm-mode 1))
-<<<<<<< HEAD
-=======
 
 ;; stolen from http://stackoverflow.com/a/26297700
 ;; makes markdown tables saner via orgtbl-mode
@@ -35,4 +33,3 @@ Will work on both org-mode and any mode that accepts plain html."
          (format tag (help-key-description key nil)))
       (insert (format tag ""))
       (forward-char -6))))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

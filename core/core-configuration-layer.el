@@ -69,15 +69,12 @@ ROOT is returned."
              (dir (car (directory-files elpa-dir 'full pkg-match))))
         (when dir (file-name-as-directory dir))))))
 
-<<<<<<< HEAD
-=======
 (defvar configuration-layer-pre-sync-hook nil
   "Hook executed at the beginning of configuration synchronization.")
 
 (defvar configuration-layer-post-sync-hook nil
   "Hook executed at the end of configuration synchronization.")
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defvar configuration-layer-rollback-directory
   (concat spacemacs-cache-directory ".rollback/")
   "Spacemacs rollback directory.")
@@ -1983,11 +1980,7 @@ depends on it."
     ;; (message "orphans: %s" orphans)
     (if orphans
         (progn
-<<<<<<< HEAD
-          (spacemacs-buffer/set-mode-line "Uninstalling not used packages...")
-=======
           (spacemacs-buffer/set-mode-line "Uninstalling unused packages...")
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
           (spacemacs//redisplay)
           (spacemacs-buffer/append
            (format "Found %s orphan package(s) to delete...\n"

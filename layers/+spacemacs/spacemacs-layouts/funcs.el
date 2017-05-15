@@ -46,16 +46,6 @@ Cancels autosave on exiting perspectives mode."
                        *persp-hash* 'non-existent))
     (persp-switch spacemacs--last-selected-layout)))
 
-<<<<<<< HEAD
-(defun spacemacs/alternate-buffer-in-persp ()
-  "Switch back and forth between current and last buffer in the
-current perspective."
-  (interactive)
-  (with-persp-buffer-list ()
-                          (switch-to-buffer (other-buffer (current-buffer) t))))
-
-=======
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 (defun spacemacs-layouts/non-restricted-buffer-list-helm ()
   (interactive)
   (let ((ido-make-buffer-list-hook (remove #'persp-restrict-ido-buffers ido-make-buffer-list-hook)))

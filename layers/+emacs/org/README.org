@@ -284,14 +284,6 @@ To permanently enable mode line display of org clock, add this snippet to your
 | ~SPC m '​~                                    | org-edit-special                             |
 | ~SPC m a~                                    | org-agenda                                   |
 | ~SPC m c~                                    | org-capture                                  |
-<<<<<<< HEAD
-| ~SPC m C~                                    | evil-org-recompute-clocks                    |
-| ~SPC m d~                                    | org-deadline                                 |
-| ~SPC m D~                                    | org-insert-drawer                            |
-| ~SPC m e e~                                  | org-export-dispatch                          |
-| ~SPC m f~                                    | org-set-effort                               |
-| ~SPC m I~                                    | org-clock-in                                 |
-=======
 | ~SPC m C c~                                  | org-clock-cancel                             |
 | ~SPC m C g~                                  | evil-org-recompute-clocks                    |
 | ~SPC m C i~                                  | org-clock-in                                 |
@@ -302,7 +294,6 @@ To permanently enable mode line display of org clock, add this snippet to your
 | ~SPC m d T~                                  | org-time-stamp-inactive                      |
 | ~SPC m e e~                                  | org-export-dispatch                          |
 | ~SPC m e m~                                  | send current buffer as HTML email message    |
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 | ~SPC m l~                                    | org-open-at-point                            |
 | ~SPC m L~                                    | org-shiftright                               |
 | ~SPC m H~                                    | org-shiftleft                                |
@@ -389,16 +380,6 @@ To permanently enable mode line display of org clock, add this snippet to your
 
 *** Element insertion
 
-<<<<<<< HEAD
-| Key Binding | Description                      |
-|-------------+----------------------------------|
-| ~SPC m h i~ | org-insert-heading-after-current |
-| ~SPC m h I~ | org-insert-heading               |
-| ~SPC m h s~ | org-insert-subheading            |
-| ~SPC m i f~ | org-insert-footnote              |
-| ~SPC m i l~ | org-insert-link                  |
-| ~SPC m i a~ | org-attach                       |
-=======
 | Key Binding   | Description                      |
 |---------------+----------------------------------|
 | ~SPC m i a~   | org-attach                       |
@@ -414,7 +395,6 @@ To permanently enable mode line display of org clock, add this snippet to your
 | ~SPC m i p~   | org-set-property                 |
 | ~SPC m i s~   | org-insert-subheading            |
 | ~SPC m i t~   | org-set-tags                     |
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 *** Links
 

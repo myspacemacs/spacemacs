@@ -206,11 +206,8 @@
         ("r" smerge-refine)
         ("u" undo-tree-undo)
         ("q" nil :exit t)))))
-<<<<<<< HEAD
-=======
 
 (defun version-control/init-browse-at-remote ()
   (use-package browse-at-remote
     :defer t
     :init (spacemacs/set-leader-keys "gho" 'browse-at-remote)))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

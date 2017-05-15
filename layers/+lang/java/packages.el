@@ -44,14 +44,7 @@
 (defun java/init-eclim ()
   (use-package eclim
     :defer t
-<<<<<<< HEAD
-    :init
-    (progn
-      (add-hook 'java-mode-hook 'eclim-mode)
-      (add-to-list 'spacemacs-jump-handlers-java-mode 'eclim-java-find-declaration))
-=======
     ;; :init (setq eclim-auto-save nil)
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
     :config
     (progn
       (spacemacs|hide-lighter eclim-mode)

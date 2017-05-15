@@ -12,10 +12,7 @@
    - [[#indentation][Indentation]]
    - [[#tests][Tests]]
    - [[#guru][Guru]]
-<<<<<<< HEAD
-=======
    - [[#autocomplete][Autocomplete]]
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
  - [[#working-with-go][Working with Go]]
    - [[#go-commands-start-with-m][Go commands (start with =m=):]]
    - [[#go-guru][Go Guru]]
@@ -26,11 +23,7 @@ This layer adds extensive support for go.
 ** Features:
 - gofmt/goimports on file save
 - Auto-completion using [[https://github.com/nsf/gocode/tree/master/emacs][go-autocomplete]] (with the =auto-completion= layer)
-<<<<<<< HEAD
-- Source analysis using [[https://godoc.org/golang.org/x/tools/cmd/guru][go-guru]]
-=======
 - Source analysis using [[https://docs.google.com/document/d/1_Y9xCEMj5S-7rv2ooHpZNH15JgRT5iM742gJkw5LtmQ][go-guru]]
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 - Linting with flycheck's built-in checkers or flycheck-gometalinter
 - Coverage profile visualization
 
@@ -106,13 +99,10 @@ function testing to work.
 the coverage buffer. See [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Choosing-Window.html][=display-buffer=]] for a list of possible functions.
 The default value is =display-buffer-reuse-window=.
 
-<<<<<<< HEAD
-=======
 Tests are run in a compilation buffer displayed in a popup window that can be
 closed by pressing ~C-g~ from any other window. The variable
 =go-test-buffer-name= can be customized to set the output buffer name.
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 ** Guru
 
 Go Oracle has been deprecated as of October 1, 2016, it's replacement is =go-guru=.
@@ -125,8 +115,6 @@ searching.
 
 In addition, =GOPATH= must be set prior to =go-guru= initialization.
 
-<<<<<<< HEAD
-=======
 ** Autocomplete
 =gocode= uses the output from installed binary files to provide its suggestions.
 You have a few options to ensure you always get up to date suggestions:
@@ -137,7 +125,6 @@ You have a few options to ensure you always get up to date suggestions:
 - You can configure your task runner to run =go install ./...= command on every
   file change.
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 * Working with Go
 ** Go commands (start with =m=):
 

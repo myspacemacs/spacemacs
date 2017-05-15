@@ -7,11 +7,7 @@
  - [[#configuration][Configuration]]
    - [[#ledger][Ledger]]
  - [[#key-bindings][Key bindings]]
-<<<<<<< HEAD
-   - [[#ledger-1][Ledger]]
-=======
    - [[#ledger][Ledger]]
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
    - [[#ledger-reconcile][Ledger-Reconcile]]
 
 * Description

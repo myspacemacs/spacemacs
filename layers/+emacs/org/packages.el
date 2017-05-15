@@ -159,15 +159,10 @@ Will work on both org-mode and any mode that accepts plain html."
             (insert (format tag ""))
             (forward-char -8))))
 
-<<<<<<< HEAD
-      (dolist (prefix '(("me" . "export")
-                        ("mx" . "text")
-=======
       (dolist (prefix '(
                         ("mC" . "clocks")
                         ("md" . "dates")
                         ("me" . "export")
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
                         ("mh" . "headings")
                         ("mi" . "insert")
                         ("miD" . "download")
@@ -183,14 +178,6 @@ Will work on both org-mode and any mode that accepts plain html."
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "'" 'org-edit-special
         "c" 'org-capture
-<<<<<<< HEAD
-        "d" 'org-deadline
-        "D" 'org-insert-drawer
-        "ee" 'org-export-dispatch
-        "f" 'org-set-effort
-        "P" 'org-set-property
-        ":" 'org-set-tags
-=======
         "Cc" 'org-clock-cancel
         "Ci" 'org-clock-in
         "Co" 'org-clock-out
@@ -199,7 +186,6 @@ Will work on both org-mode and any mode that accepts plain html."
         "dt" 'org-time-stamp
         "dT" 'org-time-stamp-inactive
         "ee" 'org-export-dispatch
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
         "a" 'org-agenda
 
@@ -266,27 +252,10 @@ Will work on both org-mode and any mode that accepts plain html."
         "*" 'org-ctrl-c-star
         "RET" 'org-ctrl-c-ret
         "-" 'org-ctrl-c-minus
-<<<<<<< HEAD
-        "^" 'org-sort
-        "/" 'org-sparse-tree
-
-        "I" 'org-clock-in
-        "n" 'org-narrow-to-subtree
-        "N" 'widen
-        "O" 'org-clock-out
-        "q" 'org-clock-cancel
-        "R" 'org-refile
-        "s" 'org-schedule
-
-        ;; insertion of common elements
-        "ia" 'org-attach
-        "il" 'org-insert-link
-=======
         ;; insertion
         "ia" 'org-attach
         "id" 'org-insert-drawer
         "ie" 'org-set-effort
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
         "if" 'org-footnote-new
         "ih" 'org-insert-heading
         "iH" 'org-insert-heading-after-current

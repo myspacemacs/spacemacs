@@ -13,10 +13,7 @@
                         edit-server
                         gmail-message-mode
                         flymd
-<<<<<<< HEAD
-=======
                         markdown-mode
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
                         ))
 
 (defun chrome/init-edit-server ()
@@ -38,36 +35,8 @@
     :init (setq flymd-browser-open-function
                 'spacemacs//flymd-browser-function)))
 
-<<<<<<< HEAD
-(defun chrome/init-gmail-message-mode ( )
-  (use-package gmail-message-mode))
-
-(defun chrome/init-flymd ()
-  (use-package flymd
-    :defer t
-    :init
-    (progn
-      (defun start-browser(browser url)
-        (let ((process-environment (browse-url-process-environment)))
-          (apply 'start-process
-                 "flymd" nil
-                 browser
-                 (list "--new-window" "--allow-file-access-from-files" url))))
-
-      (defun my-flymd-browser-function (url)
-               (cond
-                (chrome-exec-path (start-browser chrome-exec-path url))
-                ((executable-find "chromium") (start-browser (executable-find "chromium") url))
-                ((executable-find "google-chrome") (start-browser (executable-find "google-chrome") url))
-                ((executable-find "google-chrome-stable") (start-browser (executable-find "google-chrome-stable") url))
-                (t (message "no useful browser"))))
-
-      (setq flymd-browser-open-function 'my-flymd-browser-function)
-      )))
-=======
 (defun chrome/pre-init-markdown-mode ()
   (spacemacs|use-package-add-hook markdown-mode
     :pre-config
     (when (configuration-layer/package-usedp 'gmail-message-mode)
       (add-to-list 'markdown--key-bindings-modes 'gmail-message-client-mode))))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

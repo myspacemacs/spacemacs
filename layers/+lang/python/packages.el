@@ -445,9 +445,5 @@ fix this issue."
       (spacemacs/set-leader-keys-for-major-mode 'python-mode
         "=" 'yapfify-buffer)
       (when python-enable-yapf-format-on-save
-<<<<<<< HEAD
-        (add-hook 'python-mode-hook 'yapf-mode)))))
-=======
         (add-hook 'python-mode-hook 'yapf-mode)))
     :config (spacemacs|hide-lighter yapf-mode)))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

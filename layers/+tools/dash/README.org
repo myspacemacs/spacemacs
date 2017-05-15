@@ -42,11 +42,7 @@ It is recommended to set the =HUD mode= in your Dash application preferences
 when using this layer.
 
 ** Sqlite3
-<<<<<<< HEAD
-Helm Dash [[https://github.com/areina/helm-dash#requirements][requires]] sqlite3 to be installed to function properly.
-=======
 Helm Dash [[https://github.com/areina/helm-dash#user-content-requirements][requires]] sqlite3 to be installed to function properly.
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 ** Zeal (Linux & Windows)
 

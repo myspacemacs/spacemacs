@@ -97,10 +97,6 @@ one over the other:
 | ~SPC g . F~ | Pull repo with popup         |
 | ~SPC g . l~ | Show repo log                |
 
-<<<<<<< HEAD
-
-=======
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 ** Smerge Mode Transient-state
 
 | Key Binding | Description              |

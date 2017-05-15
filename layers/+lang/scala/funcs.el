@@ -36,36 +36,3 @@ point to the position of the join."
 
     (when join-pos
       (goto-char join-pos))))
-<<<<<<< HEAD
-
-(defun scala/completing-dot ()
-  "Insert a period and show company completions."
-  (interactive "*")
-  (when (s-matches? (rx (+ (not space)))
-                    (buffer-substring (line-beginning-position) (point)))
-    (delete-horizontal-space t))
-  (company-abort)
-  (insert ".")
-  (company-complete))
-
-;;; Flyspell
-
-(defun scala/flyspell-verify ()
-  "Prevent common flyspell false positives in scala-mode."
-  (and (flyspell-generic-progmode-verify)
-       (not (s-matches? (rx bol (* space) "package") (current-line)))))
-
-(defun scala/configure-flyspell ()
-  (setq-local flyspell-generic-check-word-predicate 'scala/flyspell-verify))
-
-(defun scala/yank-type-at-point ()
-  "Yank to kill ring and print short type name at point to the minibuffer."
-  (interactive)
-  (ensime-type-at-point t nil))
-
-(defun scala/yank-type-at-point-full-name ()
-  "Yank to kill ring and print full type name at point to the minibuffer."
-  (interactive)
-  (ensime-type-at-point t t))
-=======
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

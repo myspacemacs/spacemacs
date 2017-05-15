@@ -139,11 +139,7 @@ values."
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
-<<<<<<< HEAD
-   ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
-=======
    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
    ;; (default "SPC")
    dotspacemacs-emacs-command-key "SPC"
    ;; The key used for Vim Ex commands (default ":")

@@ -151,22 +151,9 @@ The proposed `emacs-plus` tap is identical to the `emacs` formulae, it just
 builds GNU Emacs with support for several features by default, including the
 Spacemacs icon. See [emacs-plus][] for more information.
 
-<<<<<<< HEAD
-*Note*: to have the title bar match your theme background color,
-consider using instead:
-
-``` sh
-$ brew install emacs-plus --HEAD --with-natural-title-bars
-```
-
-*Note:* after you have completed the [install process](#install) below, it is
-also recommended to add the [osx layer][] to your [dotfile][]. Install
-instructions are available in the [osx layer][] documentation.
-=======
 After completing the Spacemacs [install process](#install), then it's also
 recommended to add the [osx layer][] to your [dotfile][]. Installation
 instructions are available in the documentation for the [osx layer][].
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 If the powerline separators on the spaceline have a different (less saturated)
 color than the rest of the line, then you can add the following snippet to the
@@ -431,14 +418,9 @@ bugs, helping the community on the [Gitter Chat][] or sending pull requests.
 You can show your love for the project by getting cool Spacemacs t-shirts, mugs
 and more in the [Spacemacs Shop][].
 
-<<<<<<< HEAD
-If you want to show your support financially you can contribute to [Bountysource][] or buy a drink for the
-maintainer by clicking on the [Paypal badge](#top).
-=======
 If you want to show your support financially, then you can contribute to
 [Bountysource][], or buy a drink for the maintainer by clicking on the
 [Paypal badge](#top).
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 If you used spacemacs in a project, and you want to show that fact, you can use
 the spacemacs badge: [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
@@ -496,7 +478,4 @@ Thank you!
 [Bountysource]: https://salt.bountysource.com/teams/spacemacs
 [Source Code Pro]: https://github.com/adobe-fonts/source-code-pro
 [Spacemacs Shop]: https://shop.spreadshirt.com/spacemacs-shop
-<<<<<<< HEAD
-=======
 [Git]: https://git-scm.com/downloads
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0

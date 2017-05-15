@@ -56,10 +56,7 @@ part in Spacemacs is the evil mode :-)
 ** Guidelines
 These guidelines apply to all collaborators of the project, namely @syl20bnr,
 @TheBB, @d12frosted and @bmag.
-<<<<<<< HEAD
-=======
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 *** People
 - Collaborators cannot ban any GitHub user from the repository but they can ban
   users from the official Gitter channel.

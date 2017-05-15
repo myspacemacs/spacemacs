@@ -22,18 +22,6 @@
     :init
     (progn
       (add-hook 'yaml-mode-hook 'spacemacs/ansible-maybe-enable)
-<<<<<<< HEAD
-      (if ansible-auto-encrypt-descrypt
-          (add-hook 'ansible-hook 'ansible::auto-decrypt-encrypt)
-        (remove-hook 'ansible-hook 'ansible::auto-decrypt-encrypt))
-      (spacemacs/set-leader-keys-for-minor-mode 'ansible
-        "bd" 'ansible::decrypt-buffer
-        "be" 'ansible::encrypt-buffer))
-    :config
-    ;; TODO to remove when fixed upstream
-    (advice-add 'ansible::decrypt-buffer
-                :after 'spacemacs//ansible-reset-buffer-modified)))
-=======
       (put 'ansible::vault-password-file 'safe-local-variable #'stringp)
       (if ansible-auto-encrypt-decrypt
           ;; add this hook to local-vars-hook to allow users to specify
@@ -43,7 +31,6 @@
       (spacemacs/set-leader-keys-for-minor-mode 'ansible
         "bd" 'ansible::decrypt-buffer
         "be" 'ansible::encrypt-buffer))))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 (defun ansible/init-ansible-doc ()
   (use-package ansible-doc

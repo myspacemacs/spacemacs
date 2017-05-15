@@ -22,12 +22,8 @@
         go-eldoc
         go-mode
         go-guru
-<<<<<<< HEAD
-        (go-rename :location local)
-=======
         go-rename
         popwin
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
         ))
 
 

@@ -66,8 +66,6 @@ Additionally there is =flymd= package in =chrome= layer that allows to preview
 markdown buffer in Chrome. Please refer to =chrome= layer documentation for more
 information.
 
-<<<<<<< HEAD
-=======
 ** Automatic MMM-Mode Generation
 To generate MMM-Modes for languages set the value of the variable
 =markdown-mmm-auto-modes= to a list of the languages. For languages where the
@@ -83,7 +81,6 @@ list of `("language" "mode")`:
 bunch of languages. Consider opening a PR on the Spacemacs repository to add
 new languages instead of overriding the variable in your dotfile.
 
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 * Usage
 ** Generate a TOC
 To generate a table of contents type on top of the buffer:

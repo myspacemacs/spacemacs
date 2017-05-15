@@ -86,24 +86,6 @@ function or press ~o~ to go out of it.
 
 * Key bindings
 
-<<<<<<< HEAD
-| Key Binding                | Description                            |
-|----------------------------+----------------------------------------|
-| ~SPC m g g~                | go to definition of symbol under point |
-| ~SPC m h h~                | describe symbol at point               |
-| ~SPC m c c~                | byte compile the current file          |
-| ~SPC m c l~                | popup compile-log buffer               |
-| ~SPC m e $~ or ~SPC m e l~ | go to end of current line and evaluate |
-| ~SPC m e b~                | evaluate current buffer                |
-| ~SPC m e C~                | evaluate current =defun= or =setq=     |
-| ~SPC m e e~                | evaluate sexp before point             |
-| ~SPC m e f~                | evaluation current function            |
-| ~SPC m e r~                | evaluate current region                |
-| ~SPC m ​,​~                  | toggle =lisp state=                    |
-| ~SPC m t b~                | run tests of current buffer            |
-| ~SPC m t q~                | run =ert=                              |
-| ~SPC m d m~                | open [[https://github.com/joddie/macrostep][macrostep]] transient-state         |
-=======
 | Key Binding                | Description                                            |
 |----------------------------+--------------------------------------------------------|
 | ~SPC m g g~                | go to definition of symbol under point                 |
@@ -121,7 +103,6 @@ function or press ~o~ to go out of it.
 | ~SPC m t b~                | run tests of current buffer                            |
 | ~SPC m t q~                | run =ert=                                              |
 | ~SPC m d m~                | open [[https://github.com/joddie/macrostep][macrostep]] transient-state                         |
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 ** Additional evaluation functions
 If =smartparens= is used the following additional key bindings are available:
@@ -132,11 +113,7 @@ If =smartparens= is used the following additional key bindings are available:
 | ~SPC m e s~ | evaluate symbol around point |
 
 ** Format code
-<<<<<<< HEAD
-The [[file:../../semantic/README.org][semantic]] layer should be installed for these key bindings to become active.
-=======
 The [[file:../../+emacs/semantic/README.org][semantic]] layer should be installed for these key bindings to become active.
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
 
 | Key Binding | Description             |
 |-------------+-------------------------|

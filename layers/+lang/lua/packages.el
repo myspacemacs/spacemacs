@@ -12,10 +12,7 @@
 (setq lua-packages
       '(
         company
-<<<<<<< HEAD
-=======
         (company-lua :toggle (configuration-layer/package-usedp 'company))
->>>>>>> bff206af3747d17a34797c92677ffa41b1bddcb0
         flycheck
         ggtags
         helm-gtags
